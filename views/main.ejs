@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+	<style>
+		body 		{ padding-top:80px; }
+	</style>
+</head>
+<body>
+<div class="container">
+
+	<div class="jumbotron text-center">
+		<h1><span class="fa fa-unlock"></span> Node Authentication</h1>
+
+		<p>Hello <%= user.local.username %></p>
+    <a href="/auth/profile" class="btn btn-info"><span class="fa fa-user"></span> Profile</a>
+    <a href="/auth/logout" class="btn btn-danger"><span class="fa fa-user"></span> Logout</a>
+		<a href="/room" class="btn btn-default"><span class="fa fa-user"></span> Join Room 1</a>
+		<a href="/room2" class="btn btn-default"><span class="fa fa-user"></span> Join Room 2</a>
+	</div>
+
+</div>
+</body>
+</html>
