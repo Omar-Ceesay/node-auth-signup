@@ -63,6 +63,8 @@ module.exports = function(passport){
 
           newUser.local.username = username;
 
+          newUser.local.usernameUpper = username.toUpperCase();
+
           newUser.local.password = password;
 
           newUser.local.email = req.body.email;
@@ -99,7 +101,7 @@ module.exports = function(passport){
 
   passport.use('local-login', new LocalStrategy({
 
-    usernameField: 'username',
+    usernameField: 'usernameUpper',
 
     passwordField: 'password',
 
@@ -110,9 +112,10 @@ module.exports = function(passport){
   function(req, username, password, done){
 
       process.nextTick(function(){
+        username = username.toUpperCase();
 
-        User.findOne({ 'local.username': username }, function(err, user){
-
+        User.findOne({ 'local.usernameUpper': username }, function(err, user){
+          
           if(err){
 
             return done(err);
