@@ -47,7 +47,7 @@ module.exports = function(passport){
 
     process.nextTick(function(){
 
-      User.findOne({'local.username': username}, function(err, user){
+      User.findOne({'username': username}, function(err, user){
 
         if(err){
 
@@ -61,15 +61,15 @@ module.exports = function(passport){
 
           var newUser = new User();
 
-          newUser.local.username = username;
+          newUser.username = username;
 
-          newUser.local.usernameUpper = username.toUpperCase();
+          newUser.usernameUpper = username.toUpperCase();
 
-          newUser.local.password = password;
+          newUser.password = password;
 
-          newUser.local.email = req.body.email;
+          newUser.email = req.body.email;
 
-          newUser.local.name = req.body.name;
+          newUser.name = req.body.name;
 
 
 
@@ -114,8 +114,8 @@ module.exports = function(passport){
       process.nextTick(function(){
         username = username.toUpperCase();
 
-        User.findOne({ 'local.usernameUpper': username }, function(err, user){
-          
+        User.findOne({ 'usernameUpper': username }, function(err, user){
+
           if(err){
 
             return done(err);
@@ -124,7 +124,7 @@ module.exports = function(passport){
 
             return done(null, false, req.flash('loginMessage', 'No user found'));
 
-          }else if (user.local.password != password) {
+          }else if (user.password != password) {
 
             return done(null, false, req.flash('loginMessage', 'Incorrect password'));
 

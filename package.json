@@ -22,7 +22,10 @@
     "morgan": "~1.5.2",
     "passport": "~0.2.1",
     "passport-local": "~1.0.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "socket.io": "^1.7.2",
+    "superagent": "^3.3.2",
     "twilio": "^2.11.1"
   }
 }

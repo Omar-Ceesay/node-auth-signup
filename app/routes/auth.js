@@ -1,4 +1,7 @@
 var User = require('../models/user');
+var mongo = require('mongodb').MongoClient;
+var dbUrl = 'mongodb://localhost/ReactApp';
+var assert = require('assert');
 
 module.exports = function(router, passport){
 
@@ -62,6 +65,22 @@ module.exports = function(router, passport){
 
   });
 
+	router.get('/people', isLoggedIn, function(req, res){
+
+		var resultArray = [];
+		mongo.connect(dbUrl, function(err, db){
+			assert.equal(null, err);
+			var cursor = db.collection('users').find();
+			cursor.forEach(function(doc, err){
+				assert.equal(null, err);
+				resultArray.push(doc);
+			}, function(){
+				db.close();
+				res.render('people.ejs', { items: resultArray })
+			});
+		});
+
+  });
 
 
 	router.get('/upload', function(req, res){
