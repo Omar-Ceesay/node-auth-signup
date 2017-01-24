@@ -53,7 +53,7 @@ module.exports = function(passport){
 
           return done(err);
 
-        }else if(user){
+        }else if(user.toUpperCase();){
 
           return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
 
@@ -115,7 +115,7 @@ module.exports = function(passport){
         username = username.toUpperCase();
 
         User.findOne({ 'local.usernameUpper': username }, function(err, user){
-          
+
           if(err){
 
             return done(err);
