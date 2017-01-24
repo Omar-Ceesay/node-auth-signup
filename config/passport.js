@@ -42,34 +42,33 @@ module.exports = function(passport){
   },
 
   function(req, username, password, done){
-
     var mail = req.body.email;
 
     process.nextTick(function(){
 
-      User.findOne({'local.username': username}, function(err, user){
-
+      /* User.findOne({ fieldname: "fieldvalue" })  THIS MATCHS THE FIELD usernameUpper TO THE VALUE PASSED IN THE username INPUT ON SIGNUP.ejs */
+      User.findOne({'usernameUpper'/* Name on the signup form */: username.toUpperCase()}, function(err, user){
         if(err){
+          console.log(username);
 
           return done(err);
 
-        }else if(user.toUpperCase()){
+        }else if(user){
 
           return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
 
         }else{
 
           var newUser = new User();
+          newUser.username = username;
 
-          newUser.local.username = username;
+          newUser.usernameUpper = username.toUpperCase();
 
-          newUser.local.usernameUpper = username.toUpperCase();
+          newUser.password = password;
 
-          newUser.local.password = password;
+          newUser.email = req.body.email;
 
-          newUser.local.email = req.body.email;
-
-          newUser.local.name = req.body.name;
+          newUser.name = req.body.name;
 
 
 
@@ -114,7 +113,7 @@ module.exports = function(passport){
       process.nextTick(function(){
         username = username.toUpperCase();
 
-        User.findOne({ 'local.usernameUpper': username }, function(err, user){
+        User.findOne({ 'usernameUpper': username }, function(err, user){
 
           if(err){
 
@@ -124,7 +123,7 @@ module.exports = function(passport){
 
             return done(null, false, req.flash('loginMessage', 'No user found'));
 
-          }else if (user.local.password != password) {
+          }else if (user.password != password) {
 
             return done(null, false, req.flash('loginMessage', 'Incorrect password'));
 

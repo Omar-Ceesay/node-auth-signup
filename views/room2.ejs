@@ -17,10 +17,10 @@
     </style>
   </head>
   <body>
-    <% if (user.local.username) { %>
-      <h2>I have a user.local.username</h2>
+    <% if (user.username) { %>
+      <h2>I have a user.username</h2>
       <script>
-        var string = <%- JSON.stringify(user.local.username) %>;
+        var string = <%- JSON.stringify(user.username) %>;
         document.getElementById('string').innerHTML = string;
         console.log(string);
       </script>
@@ -29,7 +29,7 @@
       <h1>Hello please</h1><h1 id="string"></h1>
     </div>
     <div class="jumbotron text-center">
-      <h1>Welcome to room 2 <%= user.local.username %>!</h1>
+      <h1>Welcome to room 2 <%= user.username %>!</h1>
     </div>
     <a href="/auth/main" class="btn btn-danger"><span class="fa fa-sign-out"></span> Leave</a>
     <ul id="messages"></ul>

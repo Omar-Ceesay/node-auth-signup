@@ -18,7 +18,7 @@
   </head>
   <body>
     <div class="jumbotron text-center">
-      <h1>Welcome to room 1!</h1>
+      <h1>Welcome to room 1 <%= user.username %>!</h1>
     </div>
     <a href="/auth/main" class="btn btn-danger"><span class="fa fa-sign-out"></span> Leave</a>
     <ul id="messages"></ul>
@@ -35,7 +35,7 @@
         return false;
       });
       socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text("<%= user.local.username %>: "+msg));
+        $('#messages').append($('<li>').text("<%= user.username %>: "+msg));
       });
     </script>
   </body>
