@@ -62,6 +62,16 @@ module.exports = function(router, passport){
 
   });
 
+	router.post('/goodbye', function(req, res){
+
+    successRedirect: '/',
+
+    failureRedirect: 'login',
+
+    failureFlash: true
+
+  }));
+
 
 
 	router.get('/upload', function(req, res){
