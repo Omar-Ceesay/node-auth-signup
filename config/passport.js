@@ -53,7 +53,7 @@ module.exports = function(passport){
 
           return done(err);
 
-        }else if(user.toUpperCase();){
+        }else if(user.toUpperCase()){
 
           return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
 
