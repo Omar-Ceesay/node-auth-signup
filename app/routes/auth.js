@@ -1,6 +1,7 @@
 var User = require('../models/user');
 var mongo = require('mongodb');
-var dbUrl = 'mongodb://localhost/ReactApp';
+//var dbUrl = 'mongodb://localhost/ReactApp';
+var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
 var assert = require('assert');
 
 module.exports = function(router, passport){
