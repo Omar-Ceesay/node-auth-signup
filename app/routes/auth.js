@@ -1,4 +1,7 @@
 var User = require('../models/user');
+var mongo = require('mongodb');
+var dbUrl = 'mongodb://localhost/ReactApp';
+var assert = require('assert');
 
 module.exports = function(router, passport){
 
@@ -64,13 +67,15 @@ module.exports = function(router, passport){
 
 	router.post('/goodbye', function(req, res){
 
-    successRedirect: '/',
+		console.log(req.user._id);
 
-    failureRedirect: 'login',
+		mongo.connect(dbUrl, function(err, db) {
+			assert.equal(null, err);
+			db.collection("users").deleteOne({_id: req.user._id});
+			res.redirect('/');
+		});
 
-    failureFlash: true
-
-  }));
+  });
 
 
 
