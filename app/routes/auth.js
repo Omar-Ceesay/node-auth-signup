@@ -2,7 +2,9 @@ var User = require('../models/user');
 var mongo = require('mongodb');
 //var dbUrl = 'mongodb://localhost/ReactApp';
 var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
+var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
+var fs = require('fs');
 
 module.exports = function(router, passport){
 
@@ -78,52 +80,24 @@ module.exports = function(router, passport){
 
   });
 
-
-
-	router.get('/upload', function(req, res){
-
-		var file = new File();
-
-		file.local.filename = req.params.filename;
-
-		file.save(function(err){
-
-			if(err){
-
-				throw err;
-
-			}
-
-		});
-
-		console.log(file.local.filename);
-
-		res.send("File Sent");
-
-	});
-
-
-
 	router.post('/upload', function(req, res){
+		console.log("------- "+req.body.file);
 
-		var file = new File();
+		mongo.MongoClient.connect(dbUrl, function(error, db) {
+		  assert.ifError(error);
 
-		file.local.filename = req.params.filename;
-
-		file.save(function(err){
-
-			if(err){
-
-				throw err;
-
-			}
-
+		  var bucket = new mongo.GridFSBucket(db);
+			fs.createReadStream(req.body.file).
+		    pipe(bucket.openUploadStream('/'+req.body.file)).
+		    on('error', function(error) {
+		      assert.ifError(error);
+		    }).
+		    on('finish', function() {
+		      console.log('done!');
+		      process.exit(0);
+					res.redirect('/auth/profile');
+		    });
 		});
-
-		console.log(file.local.filename);
-
-		res.send("File Sent");
-
 	});
 
 
