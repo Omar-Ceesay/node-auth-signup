@@ -1,12 +1,13 @@
 var User = require('../models/user');
 var mongo = require('mongodb');
-//var dbUrl = 'mongodb://localhost/ReactApp';
-var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
+var dbUrl = 'mongodb://localhost/ReactApp';
+//var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var fs = require('fs');
 var multer  = require('multer');
-var upload = multer({ dest: 'uploads/' })
+var upload = multer({ dest: 'uploads/' });
+var request = require('superagent');
 
 module.exports = function(router, passport){
 
@@ -66,7 +67,15 @@ module.exports = function(router, passport){
 
   router.get('/profile', isLoggedIn, function(req, res){
 
-    res.render('profile.ejs', { user: req.user })
+		request
+      .get('http://localhost:8080/auth/profile')
+      .set('Accept', 'application/json')
+      .end(function(err, response){
+        var results = response.body.results;
+				console.log("RESULTS: "+results);
+				res.render('profile.ejs', { user: req.user, results: results });
+      });
+			console.log("TEST");
 
   });
 
