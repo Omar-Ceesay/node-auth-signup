@@ -116,11 +116,11 @@
 
 
 
-        <form action="/auth/upload" class="form" method="post">
+        <form action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
 
           <div class="form-group">
 
-            <input type="file" class="form" name="file"></input>
+            <input type="file" class="form" name="file" required="true"></input>
 
           </div>
 
