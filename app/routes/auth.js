@@ -67,7 +67,7 @@ module.exports = function(router, passport){
 
   router.get('/profile', isLoggedIn, function(req, res){
 
-		request
+		/*request
       .get('http://localhost:8080/auth/profile')
       .set('Accept', 'application/json')
       .end(function(err, response){
@@ -75,7 +75,7 @@ module.exports = function(router, passport){
 				console.log("RESULTS: "+results);
 				res.render('profile.ejs', { user: req.user, results: results });
       });
-			console.log("TEST");
+			console.log("TEST");*/
 
   });
 
