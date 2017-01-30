@@ -73,9 +73,9 @@ module.exports = function(router, passport){
       .end(function(err, response){
         var results = response.body.results;
 				console.log("RESULTS: "+results);
-				res.render('profile.ejs', { user: req.user, results: results });
       });
 			console.log("TEST");*/
+			res.render('profile.ejs', { user: req.user});
 
   });
 
