@@ -1,1 +1,1 @@
-[Node Signup App](node-auth-signup.herokuapp.com)
+[Node Signup App](https://www.node-auth-signup.herokuapp.com)
