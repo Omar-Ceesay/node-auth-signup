@@ -142,8 +142,6 @@
 
 				<h3><span class="fa fa-picture-o"></span> Picture</h3>
 
-
-
 					<p>
 
 						<strong>Key</strong>: <%= pic.Key %><br>
@@ -157,6 +155,7 @@
 						<strong>StorageClass</strong>: <%= pic.StorageClass %>
 
 					</p>
+					<%= img_tag(`https://s3.amazonaws.com/omar.karina/${pic.Key}`) %>
 
 
 
