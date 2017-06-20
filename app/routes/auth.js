@@ -108,6 +108,7 @@ module.exports = function(router, passport){
 							console.log('ERROR MSG: ', err);
 					} else {
 							console.log('Successfully uploaded data');
+							res.redirect('/auth/profile');
 							// fs.unlink("./xml/"+POrder.toString()+'.xml', (err) => {
 							// 	if (err) {
 							// 			console.log("failed to delete local file:"+err);
