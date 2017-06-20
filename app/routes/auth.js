@@ -101,7 +101,8 @@ module.exports = function(router, passport){
 			var s3bucket = new AWS.S3({params: {Bucket: 'omar.karina'}});
 			var paramsS3 = {
 					Key: req.file.originalname,
-					Body: data.toString("utf8")
+					Body: data.toString("utf8"),
+					ContentType: req.file.mimetype
 			};
 			s3bucket.upload(paramsS3, function (err, data) {
 					if (err) {
