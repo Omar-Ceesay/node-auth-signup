@@ -100,7 +100,7 @@ module.exports = function(router, passport){
 		fs.readFile( req.file.path, function (err, data) {
 			var s3bucket = new AWS.S3({params: {Bucket: 'omar.karina'}});
 			var paramsS3 = {
-					Key: req.file.filename,
+					Key: req.file.originalname,
 					Body: data.toString("utf8")
 			};
 			s3bucket.upload(paramsS3, function (err, data) {
