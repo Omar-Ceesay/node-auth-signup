@@ -1,13 +1,16 @@
 var User = require('../models/user');
 var mongo = require('mongodb');
-//var dbUrl = 'mongodb://localhost/ReactApp';
-var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
+var dbUrl = 'mongodb://localhost/ReactApp';
+//var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var fs = require('fs');
 var multer  = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var request = require('superagent');
+var AWS = require("aws-sdk");
+AWS.config.loadFromPath('./config.json');
+var s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 module.exports = function(router, passport){
 
@@ -95,35 +98,25 @@ module.exports = function(router, passport){
 
 		var file = '/' + req.file.filename;
 		fs.readFile( req.file.path, function (err, data) {
-			fs.writeFile(file, data, function (err) {
-			 if( err ){
-						console.error( err );
-						response = {
-								 message: 'Sorry, file couldn\'t be uploaded.',
-								 filename: req.file.originalname
-						};
-			 }else{
-						 response = {
-								 message: 'File uploaded successfully',
-								 filename: req.file.originalname
-						};
-				}
-				mongo.MongoClient.connect(dbUrl, function(error, db) {
-				  assert.ifError(error);
-
-				  var bucket = new mongo.GridFSBucket(db);
-					fs.createReadStream("./uploads/"+req.file.filename).
-				    pipe(bucket.openUploadStream(req.file.filename)).
-				    on('error', function(error) {
-				      assert.ifError(error);
-				    }).
-				    on('finish', function() {
-				      console.log('done!');
-							res.redirect('/auth/profile');
-							fs.unlinkSync("C:/Users/A0C6H1/git/node-auth-signup/uploads/"+req.file.filename);
-				    });
-				});
-			 });
+			var s3bucket = new AWS.S3({params: {Bucket: 'omar.karina'}});
+			var paramsS3 = {
+					Key: req.file.filename,
+					Body: data.toString("utf8")
+			};
+			s3bucket.upload(paramsS3, function (err, data) {
+					if (err) {
+							console.log('ERROR MSG: ', err);
+					} else {
+							console.log('Successfully uploaded data');
+							// fs.unlink("./xml/"+POrder.toString()+'.xml', (err) => {
+							// 	if (err) {
+							// 			console.log("failed to delete local file:"+err);
+							// 	} else {
+							// 			console.log('successfully deleted local image');
+							// 	}
+							// });
+					}
+			});
 		 });
 
 
