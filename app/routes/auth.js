@@ -88,7 +88,7 @@ module.exports = function(router, passport){
 			if (err) console.log(err, err.stack); // an error occurred
 			else{
 				console.log(data.Contents[0]);
-				imgData = data.Contents;
+				imgData = data.Contents[0];
 			}
 		});
 			res.render('profile.ejs', { user: req.user, pic: imgData});
