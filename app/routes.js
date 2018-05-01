@@ -20,4 +20,4 @@ module.exports = function(app, passport){
       return next();
     }
   }
-}
+};

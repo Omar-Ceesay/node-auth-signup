@@ -52,7 +52,7 @@ room1.on('connection', function(socket){
   });
 });
 
-var room2 = io.of('/room2')
+var room2 = io.of('/room2');
 room2.on('connection', function(socket){
   console.log('a user connected');
   socket.on('disconnect', function(){
