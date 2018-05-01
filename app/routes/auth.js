@@ -94,8 +94,8 @@ module.exports = function(router, passport){
 	router.post('/upload', upload.single('file'), function(req, res){
 
 		var file = '/' + req.file.filename;
+		console.log("req.file: \n", req.file);
 		fs.readFile( req.file.path, function (err, data) {
-			console.log("DATA: \n", data);
 			fs.writeFile(file, data, function (err) {
 			 if( err ){
 						console.error( err );
