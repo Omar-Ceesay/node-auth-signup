@@ -8,6 +8,9 @@ var fs = require('fs');
 var multer  = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var request = require('superagent');
+var AWS = require("aws-sdk");
+AWS.config.loadFromPath('./config.json');
+var s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 module.exports = function(router, passport){
 
@@ -63,22 +66,6 @@ module.exports = function(router, passport){
 
 	}));
 
-
-
-  router.get('/profile', isLoggedIn, function(req, res){
-
-		/*request
-      .get('http://localhost:8080/auth/profile')
-      .set('Accept', 'application/json')
-      .end(function(err, response){
-        var results = response.body.results;
-				console.log("RESULTS: "+results);
-      });
-			console.log("TEST");*/
-			res.render('profile.ejs', { user: req.user});
-
-  });
-
 	router.post('/goodbye', function(req, res){
 
 		console.log(req.user._id);
@@ -91,39 +78,41 @@ module.exports = function(router, passport){
 
   });
 
+	router.get('/profile', isLoggedIn, function(req, res){
+		var imgData;
+		var params = {
+		 Bucket: "omar.karina",
+		 MaxKeys: 10
+		};
+		s3.listObjectsV2(params, function(err, data) {
+			if (err) console.log(err, err.stack); // an error occurred
+			else{
+				imgData = data.Contents[0];
+				console.log(imgData);
+				res.render('profile.ejs', { user: req.user, pic: imgData});
+			}
+		});
+
+  });
+
 	router.post('/upload', upload.single('file'), function(req, res){
 
 		var file = '/' + req.file.filename;
 		fs.readFile( req.file.path, function (err, data) {
-			fs.writeFile(file, data, function (err) {
-			 if( err ){
-						console.error( err );
-						response = {
-								 message: 'Sorry, file couldn\'t be uploaded.',
-								 filename: req.file.originalname
-						};
-			 }else{
-						 response = {
-								 message: 'File uploaded successfully',
-								 filename: req.file.originalname
-						};
-				}
-				mongo.MongoClient.connect(dbUrl, function(error, db) {
-				  assert.ifError(error);
-
-				  var bucket = new mongo.GridFSBucket(db);
-					fs.createReadStream("./uploads/"+req.file.filename).
-				    pipe(bucket.openUploadStream(req.file.filename)).
-				    on('error', function(error) {
-				      assert.ifError(error);
-				    }).
-				    on('finish', function() {
-				      console.log('done!');
+			var s3bucket = new AWS.S3({params: {Bucket: 'omar.karina'}});
+			var paramsS3 = {
+					Key: req.file.originalname,
+					Body: data,
+					ContentType: req.file.mimetype
+			};
+			s3bucket.upload(paramsS3, function (err, data) {
+					if (err) {
+							console.log('ERROR MSG: ', err);
+					} else {
+							console.log('Successfully uploaded data');
 							res.redirect('/auth/profile');
-							fs.unlinkSync("C:/Users/A0C6H1/git/node-auth-signup/uploads/"+req.file.filename);
-				    });
-				});
-			 });
+					}
+			});
 		 });
 
 
