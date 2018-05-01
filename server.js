@@ -4,7 +4,6 @@ var http = require('http').Server(app);
 var port = process.env.PORT || 8080;
 //var dbUrl = 'mongodb://localhost/ReactApp';
 var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
-//var client = require('twilio')('AC9c5006526a870fb2023c8247cdf5081d', 'b188e46e390578f26e9ba7efb30ad38a');
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -69,20 +68,6 @@ room2.on('connection', function(socket){
 
 
 app.set('view engine', 'ejs');
-
-/*app.get('/chat', function(req, res){
-  client.sendMessage({
-    to: '+16517560283',
-    from: '+16122609628',
-    body: "Hey what's up"
-  },function(err, data){
-    if(!err){
-      console.log(err);
-      console.log(responseData.from);
-      console.log(responseData.body);
-    }
-  })
-})  */
 
 //auth route
 var auth = express.Router();

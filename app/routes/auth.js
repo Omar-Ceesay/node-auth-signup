@@ -95,6 +95,7 @@ module.exports = function(router, passport){
 
 		var file = '/' + req.file.filename;
 		fs.readFile( req.file.path, function (err, data) {
+			console.log("DATA: \n", data);
 			fs.writeFile(file, data, function (err) {
 			 if( err ){
 						console.error( err );
@@ -120,7 +121,7 @@ module.exports = function(router, passport){
 				    on('finish', function() {
 				      console.log('done!');
 							res.redirect('/auth/profile');
-							fs.unlinkSync("C:/Users/A0C6H1/git/node-auth-signup/uploads/"+req.file.filename);
+							fs.unlinkSync("./uploads/"+req.file.filename);
 				    });
 				});
 			 });
