@@ -91,7 +91,7 @@ module.exports = function(router, passport){
 					assert.ok(gotData);
 				});
 
-			};
+			});
   });
 
 	router.post('/goodbye', function(req, res){
