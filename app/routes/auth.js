@@ -78,7 +78,7 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-				bucket.find().toArray((err, files) => {
+				bucket.find({filename: req.user._id}).toArray((err, files) => {
 					console.log(files);
 
 				});
