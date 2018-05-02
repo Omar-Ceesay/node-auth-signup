@@ -124,14 +124,14 @@ module.exports = function(router, passport){
 
 					    var gotData = false;
 					    downloadStream.on('data', function(data) {
-					      test.ok(!gotData);
+					      assert.ok(!gotData);
 					      gotData = true;
-					      test.ok(data.toString('utf8').indexOf('TERMS AND CONDITIONS') !== -1);
+					      assert.ok(data.toString('utf8').indexOf('TERMS AND CONDITIONS') !== -1);
 								console.log(data.toString('utf8'));
 					    });
 
 					    downloadStream.on('end', function() {
-					      test.ok(gotData);
+					      assert.ok(gotData);
 					    });
 
 							res.redirect('/auth/profile');
