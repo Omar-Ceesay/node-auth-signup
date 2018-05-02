@@ -78,7 +78,7 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-				downloadStream.find().toArray((err, files) => {
+				bucket.find().toArray((err, files) => {
 					console.log(files);
 
 				});
@@ -97,7 +97,7 @@ module.exports = function(router, passport){
   });
 
 	router.post('/goodbye', function(req, res){
-		
+
 		mongo.connect(dbUrl, function(err, db) {
 			assert.equal(null, err);
 			db.collection("users").deleteOne({_id: req.user._id});
