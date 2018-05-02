@@ -5,7 +5,8 @@ var fileSchema = mongoose.Schema({
 		chunkSize: Number,
 		uploadDate: Date,
 		md5: String,
-		filename: String
+		filename: String,
+		owner: String
 });
 
 module.exports = mongoose.model('fs.files' /*THIS SHOULD BE THE COLLECTION NAME*/, fileSchema);
