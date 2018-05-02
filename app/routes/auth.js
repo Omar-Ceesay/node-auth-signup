@@ -126,7 +126,6 @@ module.exports = function(router, passport){
 					    downloadStream.on('data', function(data) {
 					      assert.ok(!gotData);
 					      gotData = true;
-					      assert.ok(data.toString('utf8').indexOf('TERMS AND CONDITIONS') !== -1);
 								console.log(data.toString('utf8'));
 					    });
 
