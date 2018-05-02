@@ -78,7 +78,7 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-				bucket.find({filename: req.user._id});
+				var files = bucket.find({filename: req.user._id});
 
 				if(files.length === 0 || !files){
 					console.log("NO FILES FOUND");
