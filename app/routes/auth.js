@@ -75,7 +75,21 @@ module.exports = function(router, passport){
 				console.log("RESULTS: "+results);
       });
 			console.log("TEST");*/
-			res.render('profile.ejs', { user: req.user});
+
+			var downloadStream = bucket.openDownloadStreamByName(req.user._id);
+
+			var gotData = false;
+			downloadStream.on('data', function(data) {
+				assert.ok(!gotData);
+				gotData = true;
+				console.log(data);
+				res.render('profile.ejs', { user: req.user, files: data});
+			});
+
+			downloadStream.on('end', function() {
+				assert.ok(gotData);
+			});
+
 
   });
 
