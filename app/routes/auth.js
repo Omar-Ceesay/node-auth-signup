@@ -78,25 +78,26 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-				var files = bucket.find({filename: req.user._id});
+				bucket.find({filename: req.user._id}).toArray((err, files) => {
 
-				if(files.length === 0 || !files){
-					console.log("NO FILES FOUND");
-				}else{
-					console.log(files);
-				}
+					if(files.length === 0 || !files){
+						console.log("NO FILES FOUND");
+					}else{
+						console.log(files);
+					}
 
-
+				});
+				res.render('profile.ejs', { user: req.user});
 				var gotData = false;
-				downloadStream.on('data', function(data) {
-					assert.ok(!gotData);
-					gotData = true;
-					res.render('profile.ejs', { user: req.user, files: data});
-				});
-
-				downloadStream.on('end', function() {
-					assert.ok(gotData);
-				});
+				// downloadStream.on('data', function(data) {
+				// 	assert.ok(!gotData);
+				// 	gotData = true;
+				// 	res.render('profile.ejs', { user: req.user, files: data});
+				// });
+				//
+				// downloadStream.on('end', function() {
+				// 	assert.ok(gotData);
+				// });
 
 			});
   });
