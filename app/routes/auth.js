@@ -75,22 +75,23 @@ module.exports = function(router, passport){
 				console.log("RESULTS: "+results);
       });
 			console.log("TEST");*/
-			var bucket = new mongo.GridFSBucket(db);
-			var downloadStream = bucket.openDownloadStreamByName(req.user._id);
+			mongo.MongoClient.connect(dbUrl, function(error, db) {
+				var bucket = new mongo.GridFSBucket(db);
+				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
 
-			var gotData = false;
-			downloadStream.on('data', function(data) {
-				assert.ok(!gotData);
-				gotData = true;
-				console.log(data);
-				res.render('profile.ejs', { user: req.user, files: data});
-			});
+				var gotData = false;
+				downloadStream.on('data', function(data) {
+					assert.ok(!gotData);
+					gotData = true;
+					console.log(data);
+					res.render('profile.ejs', { user: req.user, files: data});
+				});
 
-			downloadStream.on('end', function() {
-				assert.ok(gotData);
-			});
+				downloadStream.on('end', function() {
+					assert.ok(gotData);
+				});
 
-
+			};
   });
 
 	router.post('/goodbye', function(req, res){
