@@ -120,19 +120,19 @@ module.exports = function(router, passport){
 				    }).
 				    on('finish', function() {
 				      console.log('done!');
+							var downloadStream = bucket.openDownloadStreamByName(req.file.originalname);
 
-							// var downloadStream = bucket.openDownloadStreamByName('test.dat');
-							//
-					    // var gotData = false;
-					    // downloadStream.on('data', function(data) {
-					    //   test.ok(!gotData);
-					    //   gotData = true;
-					    //   test.ok(data.toString('utf8').indexOf('TERMS AND CONDITIONS') !== -1);
-					    // });
-							//
-					    // downloadStream.on('end', function() {
-					    //   test.ok(gotData);
-					    // });
+					    var gotData = false;
+					    downloadStream.on('data', function(data) {
+					      test.ok(!gotData);
+					      gotData = true;
+					      test.ok(data.toString('utf8').indexOf('TERMS AND CONDITIONS') !== -1);
+								console.log(data.toString('utf8'));
+					    });
+
+					    downloadStream.on('end', function() {
+					      test.ok(gotData);
+					    });
 
 							res.redirect('/auth/profile');
 							fs.unlinkSync("./uploads/"+req.file.filename);
