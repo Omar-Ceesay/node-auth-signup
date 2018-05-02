@@ -93,7 +93,7 @@ module.exports = function(router, passport){
 
 	router.post('/upload', upload.single('file'), function(req, res){
 
-		var file = '/' + req.file.originalname;
+		var file = '/' + req.file.filename;
 		console.log("req.file: \n", req.file);
 		fs.readFile( req.file.path, function (err, data) {
 			fs.writeFile(file, data, function (err) {
@@ -113,15 +113,29 @@ module.exports = function(router, passport){
 				  assert.ifError(error);
 
 				  var bucket = new mongo.GridFSBucket(db);
-					fs.createReadStream("./uploads/"+req.file.originalname).
+					fs.createReadStream("./uploads/"+req.file.filename).
 				    pipe(bucket.openUploadStream(req.file.originalname)).
 				    on('error', function(error) {
 				      assert.ifError(error);
 				    }).
 				    on('finish', function() {
 				      console.log('done!');
+
+							// var downloadStream = bucket.openDownloadStreamByName('test.dat');
+							//
+					    // var gotData = false;
+					    // downloadStream.on('data', function(data) {
+					    //   test.ok(!gotData);
+					    //   gotData = true;
+					    //   test.ok(data.toString('utf8').indexOf('TERMS AND CONDITIONS') !== -1);
+					    // });
+							//
+					    // downloadStream.on('end', function() {
+					    //   test.ok(gotData);
+					    // });
+
 							res.redirect('/auth/profile');
-							fs.unlinkSync("./uploads/"+req.file.originalname);
+							fs.unlinkSync("./uploads/"+req.file.filename);
 				    });
 				});
 			 });
