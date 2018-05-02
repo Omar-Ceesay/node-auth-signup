@@ -75,7 +75,7 @@ module.exports = function(router, passport){
 				console.log("RESULTS: "+results);
       });
 			console.log("TEST");*/
-
+			var bucket = new mongo.GridFSBucket(db);
 			var downloadStream = bucket.openDownloadStreamByName(req.user._id);
 
 			var gotData = false;
