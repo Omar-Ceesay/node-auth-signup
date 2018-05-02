@@ -78,6 +78,8 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
+				var finder = bucket.find({filename: req.user._id});
+				console.log(finder);
 
 				var gotData = false;
 				downloadStream.on('data', function(data) {
