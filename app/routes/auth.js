@@ -79,7 +79,11 @@ module.exports = function(router, passport){
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
 				bucket.find({filename: req.user._id}).toArray((err, files) => {
-					console.log(files);
+					if(files.length === 0 || !files){
+						console.log("NO FILES FOUND");
+					}else{
+						console.log(files);
+					}
 
 				});
 				var gotData = false;
