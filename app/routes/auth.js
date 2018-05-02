@@ -78,14 +78,14 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-				var finder = bucket.find({filename: req.user._id});
-				console.log("FINDER:::: \n",finder);
+				downloadStream.find().toArray((err, files) => {
+					console.log(files);
 
+				});
 				var gotData = false;
 				downloadStream.on('data', function(data) {
 					assert.ok(!gotData);
 					gotData = true;
-					console.log(data);
 					res.render('profile.ejs', { user: req.user, files: data});
 				});
 
@@ -97,9 +97,7 @@ module.exports = function(router, passport){
   });
 
 	router.post('/goodbye', function(req, res){
-
-		console.log(req.user._id);
-
+		
 		mongo.connect(dbUrl, function(err, db) {
 			assert.equal(null, err);
 			db.collection("users").deleteOne({_id: req.user._id});
