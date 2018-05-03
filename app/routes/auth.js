@@ -115,7 +115,7 @@ module.exports = function(router, passport){
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
-							finData = data.toString('base64');
+							finData = data;
 							console.log(finData);
 						});
 
@@ -125,7 +125,7 @@ module.exports = function(router, passport){
 									console.log(err);
 								}else{
 
-									fs.writeFile(tempFile, finData, function (err) {
+									fs.writeFile(tempFile, finData, 'binary', function (err) {
 										if( err ){
 											console.error( err );
 										}else{
@@ -133,8 +133,7 @@ module.exports = function(router, passport){
 												if(err){
 													console.log(err)
 												}else{
-													// fs.unlinkSync(tempFile);
-													// This Here
+													fs.unlinkSync(tempFile);
 												};
 											});
 
