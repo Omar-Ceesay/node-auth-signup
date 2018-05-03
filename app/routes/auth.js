@@ -117,9 +117,6 @@ module.exports = function(router, passport){
 							gotData = true;
 							finData = data.toString('binary');
 							// console.log(finData);
-						});
-
-						downloadStream.on('end', function() {
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
 									console.log(err);
@@ -141,6 +138,9 @@ module.exports = function(router, passport){
 									});
 								}
 							});
+						});
+
+						downloadStream.on('end', function() {
 							assert.ok(gotData);
 						});
 					}
