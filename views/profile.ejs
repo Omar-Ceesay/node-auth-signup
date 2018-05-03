@@ -117,7 +117,7 @@
 
 	          <div class="form-group">
 
-	            <input type="file" class="form" name="filer" required="true"></input>
+	            <input type="file" class="form" name="file" required="true"></input>
 
 	          </div>
 
@@ -135,7 +135,7 @@
 			<h2>Files:</h2>
 			<% if(files){ %>
 				<% files.forEach(function(file){ %>
-					<form action="/auth/file" class="form" method="post">
+					<form action="/auth/file/<%= file._id.originalname%><%= file._id.userId %>" class="form" method="post">
 	          <div class="form-group">
 
 	            <input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input>

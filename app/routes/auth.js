@@ -105,34 +105,37 @@ module.exports = function(router, passport){
 			});
   });
 
-	router.post('/file', upload.single('file'), function(req, res){
+	router.post('/file/:id', function(req, res){
 
-			mongo.MongoClient.connect(dbUrl, function(error, db) {
-				var bucket = new mongo.GridFSBucket(db);
-				bucket.find({filename: req.user._id}).toArray((err, files) => {
+			var id = req.params.id;
+			console.log(id);
 
-					if(files.length === 0 || !files){
-						console.log("NO FILES FOUND");
-						res.render('profile.ejs', { user: req.user, files: []});
-					}else{
-
-						console.log(req);
-						console.log("userId::::: \n",req.userId);
-						var downloadStream = bucket.openDownloadStream({userId: req.userId, originalname: req.originalname});
-						var gotData = false;
-						downloadStream.on('data', function(data) {
-							assert.ok(!gotData);
-							gotData = true;
-							console.log("HERE IS THE FILE::: \n", data);
-							res.render('profile.ejs', { user: req.user, files: files});
-						});
-
-						downloadStream.on('end', function() {
-							assert.ok(gotData);
-						});
-					}
-
-				});
+			// mongo.MongoClient.connect(dbUrl, function(error, db) {
+			// 	var bucket = new mongo.GridFSBucket(db);
+			// 	bucket.find({filename: req.user._id}).toArray((err, files) => {
+			//
+			// 		if(files.length === 0 || !files){
+			// 			console.log("NO FILES FOUND");
+			// 			res.render('profile.ejs', { user: req.user, files: []});
+			// 		}else{
+			//
+			// 			console.log(req);
+			// 			console.log("userId::::: \n",req.userId);
+			// 			var downloadStream = bucket.openDownloadStream({userId: req.userId, originalname: req.originalname});
+			// 			var gotData = false;
+			// 			downloadStream.on('data', function(data) {
+			// 				assert.ok(!gotData);
+			// 				gotData = true;
+			// 				console.log("HERE IS THE FILE::: \n", data);
+			// 				res.render('profile.ejs', { user: req.user, files: files});
+			// 			});
+			//
+			// 			downloadStream.on('end', function() {
+			// 				assert.ok(gotData);
+			// 			});
+			// 		}
+			//
+			// 	});
 				var gotData = false;
 
 			});
