@@ -138,7 +138,7 @@ module.exports = function(router, passport){
 
   });
 
-	router.delete('/file/:name/:id', (req, res) => {
+	router.delete('/file/delete/:name/:id', (req, res) => {
 		mongo.MongoClient.connect(dbUrl, function(error, db) {
 			var bucket = new mongo.GridFSBucket(db);
 			bucket.remove({userId: req.params.id, originalname: req.params.name}, (err, gridStore) => {
