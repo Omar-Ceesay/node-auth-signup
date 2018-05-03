@@ -117,7 +117,7 @@ module.exports = function(router, passport){
 					}else{
 
 						var downloadStream = bucket.openDownloadStream({userId: req.userId, originalname: req.originalname});
-						console.log(req);
+						console.log(req.route.Route.stack[0]);
 						var gotData = false;
 						downloadStream.on('data', function(data) {
 							assert.ok(!gotData);
