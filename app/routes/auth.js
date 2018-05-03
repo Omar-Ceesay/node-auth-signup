@@ -67,14 +67,6 @@ module.exports = function(router, passport){
 
   router.get('/profile', isLoggedIn, function(req, res){
 
-		/*request
-      .get('http://localhost:8080/auth/profile')
-      .set('Accept', 'application/json')
-      .end(function(err, response){
-        var results = response.body.results;
-				console.log("RESULTS: "+results);
-      });
-			console.log("TEST");*/
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				bucket.find({filename: req.user._id}).toArray((err, files) => {
@@ -91,7 +83,6 @@ module.exports = function(router, passport){
 						downloadStream.on('data', function(data) {
 							assert.ok(!gotData);
 							gotData = true;
-							console.log(data);
 						});
 
 						downloadStream.on('end', function() {
@@ -173,7 +164,6 @@ module.exports = function(router, passport){
 	router.post('/upload', upload.single('file'), function(req, res){
 
 		var file = '/' + req.file.filename;
-		console.log("req.file: \n", req.file);
 		fs.readFile( req.file.path, function (err, data) {
 			fs.writeFile(file, data, function (err) {
 			 if( err ){
@@ -205,7 +195,6 @@ module.exports = function(router, passport){
 					    downloadStream.on('data', function(data) {
 					      assert.ok(!gotData);
 					      gotData = true;
-								console.log(data.toString('utf8'));
 					    });
 
 					    downloadStream.on('end', function() {
