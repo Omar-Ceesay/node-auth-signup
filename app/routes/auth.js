@@ -136,9 +136,9 @@ module.exports = function(router, passport){
 			// 		}
 			//
 			// 	});
-				var gotData = false;
-
-			});
+			// 	var gotData = false;
+			//
+			// });
   });
 
 	router.post('/goodbye', function(req, res){
