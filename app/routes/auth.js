@@ -111,9 +111,11 @@ module.exports = function(router, passport){
 
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
+						var finData;
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
+							finData = data.toString('binary');
 							// console.log(finData);
 						});
 
@@ -131,7 +133,7 @@ module.exports = function(router, passport){
 												if(err){
 													console.log(err)
 												}else{
-													fs.unlinkSync(tempFile);
+													// fs.unlinkSync(tempFile);
 												};
 											});
 
