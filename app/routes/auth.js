@@ -115,7 +115,7 @@ module.exports = function(router, passport){
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
-							finData += data;
+							finData += data.toString('base64');
 						});
 
 						downloadStream.on('end', function() {
