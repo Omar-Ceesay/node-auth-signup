@@ -111,18 +111,19 @@ module.exports = function(router, passport){
 
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
-						var finData;
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
-							finData = data.toString('binary');
 							// console.log(finData);
+						});
+
+						downloadStream.on('end', function() {
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
 									console.log(err);
 								}else{
 
-									fs.writeFile(tempFile, finData.toString('binary'), function (err) {
+									fs.writeFile(tempFile, data.toString('binary'), function (err) {
 										if( err ){
 											console.error( err );
 										}else{
@@ -138,9 +139,6 @@ module.exports = function(router, passport){
 									});
 								}
 							});
-						});
-
-						downloadStream.on('end', function() {
 							assert.ok(gotData);
 						});
 					}
