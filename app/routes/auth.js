@@ -107,7 +107,7 @@ module.exports = function(router, passport){
 
 	router.post('/file/:name/:id', function(req, res){
 
-			console.log(req.params.id+" === "+req.params.name);
+			console.log(__dirname);
 			var tempFile = __dirname+"/temp/"+req.params.name;
 
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
