@@ -105,40 +105,39 @@ module.exports = function(router, passport){
 			});
   });
 
-	router.post('/file/:id', function(req, res){
+	router.post('/file/:name/:id', function(req, res){
 
-			var id = req.params.id;
-			console.log(id);
+			console.log(req.params.id+" === "+req.params.name);
 
-			// mongo.MongoClient.connect(dbUrl, function(error, db) {
-			// 	var bucket = new mongo.GridFSBucket(db);
-			// 	bucket.find({filename: req.user._id}).toArray((err, files) => {
-			//
-			// 		if(files.length === 0 || !files){
-			// 			console.log("NO FILES FOUND");
-			// 			res.render('profile.ejs', { user: req.user, files: []});
-			// 		}else{
-			//
-			// 			console.log(req);
-			// 			console.log("userId::::: \n",req.userId);
-			// 			var downloadStream = bucket.openDownloadStream({userId: req.userId, originalname: req.originalname});
-			// 			var gotData = false;
-			// 			downloadStream.on('data', function(data) {
-			// 				assert.ok(!gotData);
-			// 				gotData = true;
-			// 				console.log("HERE IS THE FILE::: \n", data);
-			// 				res.render('profile.ejs', { user: req.user, files: files});
-			// 			});
-			//
-			// 			downloadStream.on('end', function() {
-			// 				assert.ok(gotData);
-			// 			});
-			// 		}
-			//
-			// 	});
-			// 	var gotData = false;
-			//
-			// });
+			mongo.MongoClient.connect(dbUrl, function(error, db) {
+				var bucket = new mongo.GridFSBucket(db);
+				bucket.find({filename: req.user._id}).toArray((err, files) => {
+
+					if(files.length === 0 || !files){
+						console.log("NO FILES FOUND");
+						res.render('profile.ejs', { user: req.user, files: []});
+					}else{
+
+						console.log(req);
+						console.log("userId::::: \n",req.userId);
+						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
+						var gotData = false;
+						downloadStream.on('data', function(data) {
+							assert.ok(!gotData);
+							gotData = true;
+							console.log("HERE IS THE FILE::: \n", data);
+							res.render('profile.ejs', { user: req.user, files: files});
+						});
+
+						downloadStream.on('end', function() {
+							assert.ok(gotData);
+						});
+					}
+
+				});
+				var gotData = false;
+
+			});
   });
 
 	router.post('/goodbye', function(req, res){
