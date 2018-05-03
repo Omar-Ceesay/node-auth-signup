@@ -115,8 +115,8 @@ module.exports = function(router, passport){
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
-							finData = data.toString('binary');
-							// console.log(finData);
+							finData = data.toString('base64');
+							console.log(finData);
 						});
 
 						downloadStream.on('end', function() {
@@ -125,7 +125,7 @@ module.exports = function(router, passport){
 									console.log(err);
 								}else{
 
-									fs.writeFile(tempFile, data.toString('binary'), function (err) {
+									fs.writeFile(tempFile, finData, function (err) {
 										if( err ){
 											console.error( err );
 										}else{
