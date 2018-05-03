@@ -135,15 +135,16 @@
 
 		</div>
 		<div class="col-md-12">
-		 <% if(files){ %>
+			<h2>File:</h2>
+			<% if(files){ %>
 				<% files.forEach(function(file){ %>
-					<h4><% file.uploadDate %></h4>
-					<h4><% file.userId %></h4>
+					<h4><%= file.uploadDate %></h4>
+					<h4><%= file.userId %></h4>
 					<% console.log(file.uploadDate) %>
 				<% }) %>
-		 <% }else{ %>
+			<% }else{ %>
 				<p>No files found</p>
-		 <% } %>
+			<% } %>
 		</div>
 
 
