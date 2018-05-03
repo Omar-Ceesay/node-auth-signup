@@ -116,6 +116,7 @@ module.exports = function(router, passport){
 							// assert.ok(!gotData);
 							gotData = true;
 							finData = data;
+							console.log(data);
 						});
 
 						downloadStream.on('end', function() {
@@ -133,7 +134,6 @@ module.exports = function(router, passport){
 													console.log(err)
 												}else{
 													fs.unlinkSync(tempFile);
-													// res.render('profile.ejs', { user: req.user, files: files});
 												};
 											});
 
