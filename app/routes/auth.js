@@ -144,7 +144,7 @@ module.exports = function(router, passport){
 							assert.ok(gotData);
 						});
 						var theDown = '';
-						downloadStream.pipe(theDown)
+						downloadStream.pipe(res)
 						.on('finish', function(){
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
