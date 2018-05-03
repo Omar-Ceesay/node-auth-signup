@@ -144,30 +144,19 @@ module.exports = function(router, passport){
 							assert.ok(gotData);
 						});
 						var theDown = '';
-						downloadStream.pipe(res)
-						.on('finish', function(){
-							fs.open(tempFile, 'w+', (err, fd) =>{
+						downloadStream.pipe(fs.createWriteStream(tempFile).on('error',
+						function(error){
+							console.log(error);
+						}).on('finish', function(){
+							console.log("Download Complete");
+							res.download(tempFile, req.params.name, function(err){
 								if(err){
-									console.log(err);
+									console.log(err)
 								}else{
-
-									fs.writeFile(tempFile, theDown, function (err) {
-										if( err ){
-											console.error( err );
-										}else{
-											res.download(tempFile, req.params.name, function(err){
-												if(err){
-													console.log(err)
-												}else{
-													fs.unlinkSync(tempFile);
-												};
-											});
-
-										}
-									});
-								}
+									fs.unlinkSync(tempFile);
+								};
 							});
-						});
+						}));
 
 					}
 
