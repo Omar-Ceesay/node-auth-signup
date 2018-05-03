@@ -78,7 +78,7 @@ module.exports = function(router, passport){
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
 				var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-				bucket.find({userId: req.user._id}).toArray((err, files) => {
+				bucket.find({filename: req.user._id}).toArray((err, files) => {
 
 					if(files.length === 0 || !files){
 						console.log("NO FILES FOUND");
@@ -135,13 +135,13 @@ module.exports = function(router, passport){
 
 				  var bucket = new mongo.GridFSBucket(db);
 					fs.createReadStream("./uploads/"+req.file.filename).
-				    pipe(bucket.openUploadStreamWithId({userId :req.user._id}, req.file.originalname)).
+				    pipe(bucket.openUploadStreamWithId({userId :req.file.filename}, req.user._id)).
 				    on('error', function(error) {
 				      assert.ifError(error);
 				    }).
 				    on('finish', function() {
 				      console.log('done!');
-							var downloadStream = bucket.openDownloadStreamByName(req.file.originalname);
+							var downloadStream = bucket.openDownloadStreamByName(req.user._id);
 
 					    var gotData = false;
 					    downloadStream.on('data', function(data) {
