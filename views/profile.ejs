@@ -135,7 +135,7 @@
 			<h2>Files:</h2>
 			<% if(files){ %>
 				<% files.forEach(function(file){ %>
-					<form action="/auth/file" class="form" method="get" enctype="multipart/form-data">
+					<form action="/auth/file" class="form" method="post" enctype="multipart/form-data">
 	          <div class="form-group">
 
 	            <input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input>

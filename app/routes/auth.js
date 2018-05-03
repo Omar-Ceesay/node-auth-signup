@@ -105,7 +105,7 @@ module.exports = function(router, passport){
 			});
   });
 
-	router.get('/file', isLoggedIn, function(req, res){
+	router.post('/file', isLoggedIn, function(req, res){
 
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
