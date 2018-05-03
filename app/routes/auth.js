@@ -128,19 +128,12 @@ module.exports = function(router, passport){
 							fs.writeFile("./temp/"+req.params.name, data, function (err) {
 							 if( err ){
 										console.error( err );
-										response = {
-												 message: 'Sorry, file couldn\'t be uploaded.',
-												 filename: req.file.originalname
-										};
 							 }else{
-										 response = {
-												 message: 'File uploaded successfully',
-												 filename: req.file.originalname
-										};
 
 										res.download("./temp/"+req.params.name);
 										res.render('profile.ejs', { user: req.user, files: files});
 										fs.unlinkSync("./temp/"+req.params.name);
+										
 								}
 							 });
 						});
