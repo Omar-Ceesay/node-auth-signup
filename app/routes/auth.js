@@ -108,6 +108,7 @@ module.exports = function(router, passport){
 	router.post('/file/:name/:id', function(req, res){
 
 			console.log(req.params.id+" === "+req.params.name);
+			var tempFile = __dirname+"/temp/"+req.params.name;
 
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
@@ -118,22 +119,20 @@ module.exports = function(router, passport){
 						res.render('profile.ejs', { user: req.user, files: []});
 					}else{
 
-						console.log(req);
-						console.log("userId::::: \n",req.userId);
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
 						downloadStream.on('data', function(data) {
 							assert.ok(!gotData);
 							gotData = true;
-							fs.writeFile("./temp/"+req.params.name, data, function (err) {
-							 if( err ){
+							fs.writeFile(tempFile, data, function (err) {
+								if( err ){
 										console.error( err );
-							 }else{
+								}else{
 
-										res.download("./temp/"+req.params.name);
+										res.download(tempFile);
 										res.render('profile.ejs', { user: req.user, files: files});
-										fs.unlinkSync("./temp/"+req.params.name);
-										
+										fs.unlinkSync(tempFile);
+
 								}
 							 });
 						});
@@ -163,7 +162,6 @@ module.exports = function(router, passport){
 	router.post('/upload', upload.single('file'), function(req, res){
 
 		var file = '/' + req.file.filename;
-		console.log(req);
 		console.log("req.file: \n", req.file);
 		fs.readFile( req.file.path, function (err, data) {
 			fs.writeFile(file, data, function (err) {
