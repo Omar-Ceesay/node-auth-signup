@@ -117,7 +117,7 @@ module.exports = function(router, passport){
 					}else{
 
 						var downloadStream = bucket.openDownloadStream({userId: req.userId, originalname: req.originalname});
-						console.log(req.route.Route.stack[0]);
+						console.log(req);
 						var gotData = false;
 						downloadStream.on('data', function(data) {
 							assert.ok(!gotData);
@@ -150,6 +150,7 @@ module.exports = function(router, passport){
 	router.post('/upload', upload.single('file'), function(req, res){
 
 		var file = '/' + req.file.filename;
+		console.log(req);
 		console.log("req.file: \n", req.file);
 		fs.readFile( req.file.path, function (err, data) {
 			fs.writeFile(file, data, function (err) {
