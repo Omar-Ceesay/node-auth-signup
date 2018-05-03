@@ -112,38 +112,38 @@ module.exports = function(router, passport){
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
 						downloadStream.pipe(res.download(tempFile, req.params.name));
-						// downloadStream.on('data', function(data) {
-						// 	// assert.ok(!gotData);
-						// 	var finData = "";
-						// 	gotData = true;
-						// 	finData += data.toString('binary');
-						// });
+						downloadStream.on('data', function(data) {
+							// assert.ok(!gotData);
+							var finData = "";
+							gotData = true;
+							finData += data.toString('binary');
+						});
 
-						// downloadStream.on('end', function() {
-						// 	// console.log(finData);
-						// 	// fs.open(tempFile, 'w+', (err, fd) =>{
-						// 	// 	if(err){
-						// 	// 		console.log(err);
-						// 	// 	}else{
-						// 	//
-						// 	// 		fs.writeFile(tempFile, finData, function (err) {
-						// 	// 			if( err ){
-						// 	// 				console.error( err );
-						// 	// 			}else{
-						// 	// 				res.download(tempFile, req.params.name, function(err){
-						// 	// 					if(err){
-						// 	// 						console.log(err)
-						// 	// 					}else{
-						// 	// 						fs.unlinkSync(tempFile);
-						// 	// 					};
-						// 	// 				});
-						// 	//
-						// 	// 			}
-						// 	// 		});
-						// 	// 	}
-						// 	// });
-						// 	assert.ok(gotData);
-						// });
+						downloadStream.on('end', function() {
+							// console.log(finData);
+							// fs.open(tempFile, 'w+', (err, fd) =>{
+							// 	if(err){
+							// 		console.log(err);
+							// 	}else{
+							//
+							// 		fs.writeFile(tempFile, finData, function (err) {
+							// 			if( err ){
+							// 				console.error( err );
+							// 			}else{
+							// 				res.download(tempFile, req.params.name, function(err){
+							// 					if(err){
+							// 						console.log(err)
+							// 					}else{
+							// 						fs.unlinkSync(tempFile);
+							// 					};
+							// 				});
+							//
+							// 			}
+							// 		});
+							// 	}
+							// });
+							assert.ok(gotData);
+						});
 					}
 
 				});
