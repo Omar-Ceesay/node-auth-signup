@@ -81,7 +81,7 @@ module.exports = function(router, passport){
 
 						var gotData = false;
 						downloadStream.on('data', function(data) {
-							assert.ok(!gotData);
+							// assert.ok(!gotData);
 							gotData = true;
 						});
 
@@ -113,7 +113,7 @@ module.exports = function(router, passport){
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
 						downloadStream.on('data', function(data) {
-							assert.ok(!gotData);
+							// assert.ok(!gotData);
 							gotData = true;
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
