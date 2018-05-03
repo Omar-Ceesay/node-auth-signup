@@ -85,7 +85,6 @@ module.exports = function(router, passport){
 						res.render('profile.ejs', { user: req.user, files: []});
 					}else{
 						res.render('profile.ejs', { user: req.user, files: files});
-						console.log(files);
 					}
 					// downloadStream.on('data', function(data) {
 					// 	assert.ok(!gotData);
