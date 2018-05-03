@@ -193,7 +193,7 @@ module.exports = function(router, passport){
 
 					    var gotData = false;
 					    downloadStream.on('data', function(data) {
-					      assert.ok(!gotData);
+					      // assert.ok(!gotData);
 					      gotData = true;
 					    });
 
