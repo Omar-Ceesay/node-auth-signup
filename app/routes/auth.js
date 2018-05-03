@@ -133,9 +133,9 @@ module.exports = function(router, passport){
 													console.log(err)
 												}else{
 													fs.unlinkSync(tempFile);
+													// res.render('profile.ejs', { user: req.user, files: files});
 												};
 											});
-											res.render('profile.ejs', { user: req.user, files: files});
 
 										}
 									});
