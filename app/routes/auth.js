@@ -115,10 +115,11 @@ module.exports = function(router, passport){
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
-							finData += data.toString('base64');
+							finData += data.toString('binary');
 						});
 
 						downloadStream.on('end', function() {
+							console.log(findata);
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
 									console.log(err);
