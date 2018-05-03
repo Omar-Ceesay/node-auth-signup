@@ -52,8 +52,20 @@
 		    cursor: pointer;
 		}
 
-		.form {
+		table {
+		    font-family: arial, sans-serif;
+		    border-collapse: collapse;
+		    width: 100%;
+		}
 
+		td, th {
+		    border: 1px solid #dddddd;
+		    text-align: left;
+		    padding: 8px;
+		}
+
+		tr:nth-child(even) {
+		    background-color: #dddddd;
 		}
 
 	</style>
@@ -142,8 +154,8 @@
 				<% files.forEach(function(file){ %>
 					<form action="/auth/file/<%= file._id.originalname%>/<%= file._id.userId %>" class="form" method="post">
 					  <tr>
-					    <th><input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled><%= file._id.originalname %></input></th>
-					    <th><input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled><%= file._id.userId %></input></th>
+					    <th><input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input></th>
+					    <th><input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled></input></th>
 					    <th><button type="submit" class="btn btn-primary">Download</button></th>
 					  </tr>
 	        </form>
