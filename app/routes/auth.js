@@ -111,11 +111,11 @@ module.exports = function(router, passport){
 
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
-						var finData;
+						var finData = "";
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
-							finData += data;
+							finData += data.toString('binary');
 							console.log(finData);
 						});
 
@@ -125,7 +125,7 @@ module.exports = function(router, passport){
 									console.log(err);
 								}else{
 
-									fs.writeFile(tempFile, finData, 'binary', function (err) {
+									fs.writeFile(tempFile, finData, function (err) {
 										if( err ){
 											console.error( err );
 										}else{
