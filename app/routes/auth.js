@@ -143,8 +143,31 @@ module.exports = function(router, passport){
 							// });
 							assert.ok(gotData);
 						});
-						
-						downloadStream.pipe(res);
+						var theDown = '';
+						downloadStream.pipe(theDown)
+						.on('finish', function(){
+							fs.open(tempFile, 'w+', (err, fd) =>{
+								if(err){
+									console.log(err);
+								}else{
+
+									fs.writeFile(tempFile, theDown, function (err) {
+										if( err ){
+											console.error( err );
+										}else{
+											res.download(tempFile, req.params.name, function(err){
+												if(err){
+													console.log(err)
+												}else{
+													fs.unlinkSync(tempFile);
+												};
+											});
+
+										}
+									});
+								}
+							});
+						});
 
 					}
 
