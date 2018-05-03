@@ -52,6 +52,10 @@
 		    cursor: pointer;
 		}
 
+		.form {
+
+		}
+
 	</style>
 
 </head>
@@ -124,7 +128,7 @@
 	          <button type="submit" class="btn btn-primary">Submit</button>
 
 	        </form>
-					<button id="myBtn" class="danger">Delete Account</button>
+					<button id="myBtn" class="btn btn-danger">Delete Account</button>
 
 				</div>
 
@@ -134,17 +138,17 @@
 		<div class="col-md-12">
 			<h2>Files:</h2>
 			<% if(files){ %>
+				<table style="width:100%">
 				<% files.forEach(function(file){ %>
 					<form action="/auth/file/<%= file._id.originalname%>/<%= file._id.userId %>" class="form" method="post">
-	          <div class="form-group">
-
-	            <input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input>
-							<input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled></input>
-	          </div>
-
-	          <button type="submit" class="btn btn-primary">Download</button>
+					  <tr>
+					    <th><input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled><%= file._id.originalname %></input></th>
+					    <th><input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled><%= file._id.userId %></input></th>
+					    <th><button type="submit" class="btn btn-primary">Download</button></th>
+					  </tr>
 	        </form>
 				<% }) %>
+			</table>
 			<% }else{ %>
 				<p>No files found</p>
 			<% } %>
