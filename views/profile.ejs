@@ -104,7 +104,8 @@
 					 <h3>
 					 	<% if(files){ %>
 							 <% files.forEach(function(file){ %>
-								 <h4><% file %></h4>
+								 <h4><% file.uploadDate %></h4>
+								 <h4><% file.userId %></h4>
 								 <% console.log(file) %>
 							 <% }) %>
 						<% }else{ %>
