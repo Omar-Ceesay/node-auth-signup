@@ -85,7 +85,7 @@ module.exports = function(router, passport){
 					}else{
 						res.render('profile.ejs', { user: req.user, files: files});
 
-						var downloadStream = bucket.openDownloadStream(files[0]._id.userId);
+						var downloadStream = bucket.openDownloadStream({userId: files[0]._id.userId, originalname: files[0]._id.originalname});
 
 						var gotData = false;
 						downloadStream.on('data', function(data) {
