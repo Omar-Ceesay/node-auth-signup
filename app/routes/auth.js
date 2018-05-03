@@ -119,7 +119,7 @@ module.exports = function(router, passport){
 						});
 
 						downloadStream.on('end', function() {
-							console.log(findata);
+							console.log(finData);
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
 									console.log(err);
