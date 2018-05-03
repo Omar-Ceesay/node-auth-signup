@@ -128,12 +128,12 @@ module.exports = function(router, passport){
 								if(err){
 									console.log(err);
 								}else{
-									
+
 									fs.writeFile(tempFile, data, function (err) {
 										if( err ){
 											console.error( err );
 										}else{
-
+											res.download( __dirname+"/temp/test.txt");
 											res.download(tempFile);
 											res.render('profile.ejs', { user: req.user, files: files});
 											fs.unlinkSync(tempFile);
