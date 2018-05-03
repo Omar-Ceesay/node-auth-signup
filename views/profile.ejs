@@ -138,8 +138,8 @@
 					<form action="/auth/file" class="form" method="get" enctype="multipart/form-data">
 	          <div class="form-group">
 
-	            <input type="text" class="form" name="originalname" required="true"><%= file._id.originalname %></input>
-							<input type="text" class="form" name="userId" required="true"><%= file._id.userId %></input>
+	            <input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input>
+							<input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled></input>
 	          </div>
 
 	          <button type="submit" class="btn btn-primary">Download</button>
