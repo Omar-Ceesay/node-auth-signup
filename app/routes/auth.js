@@ -115,15 +115,16 @@ module.exports = function(router, passport){
 						console.log("NO FILES FOUND");
 						res.render('profile.ejs', { user: req.user, files: []});
 					}else{
-						res.render('profile.ejs', { user: req.user, files: files});
 
 						var downloadStream = bucket.openDownloadStream({userId: req.userId, originalname: req.originalname});
-
+						console.log(req.userId);
+						console.log(req.originalname);
 						var gotData = false;
 						downloadStream.on('data', function(data) {
 							assert.ok(!gotData);
 							gotData = true;
 							console.log("HERE IS THE FILE::: \n", data);
+							res.render('profile.ejs', { user: req.user, files: files});
 						});
 
 						downloadStream.on('end', function() {
