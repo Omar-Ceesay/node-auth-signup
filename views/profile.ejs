@@ -113,8 +113,6 @@
 
 					<h3><span class="fa fa-mail-forward"></span> File Upload</h3>
 
-
-
 	        <form action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
 
 	          <div class="form-group">
@@ -126,9 +124,7 @@
 	          <button type="submit" class="btn btn-primary">Submit</button>
 
 	        </form>
-					<button id="myBtn">Open Modal</button>
-
-
+					<button id="myBtn" class="danger">Delete Account</button>
 
 				</div>
 
@@ -139,7 +135,15 @@
 			<h2>Files:</h2>
 			<% if(files){ %>
 				<% files.forEach(function(file){ %>
-					<h4><%= file._id.originalname %></h4>
+					<form action="/auth/file" class="form" method="get" enctype="multipart/form-data">
+	          <div class="form-group">
+
+	            <input type="text" class="form" name="originalname" required="true"><%= file._id.originalname %></input>
+							<input type="text" class="form" name="userId" required="true"><%= file._id.userId %></input>
+	          </div>
+
+	          <button type="submit" class="btn btn-primary">Download</button>
+	        </form>
 				<% }) %>
 			<% }else{ %>
 				<p>No files found</p>
