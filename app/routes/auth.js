@@ -133,7 +133,7 @@ module.exports = function(router, passport){
 										if( err ){
 											console.error( err );
 										}else{
-											res.download(tempFile, "test.txt", function(err){
+											res.download(tempFile, req.params.name, function(err){
 												if(err){
 													console.log(err)
 												}else{
