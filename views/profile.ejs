@@ -156,7 +156,12 @@
 					  <tr>
 					    <th><input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input></th>
 					    <th><input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled></input></th>
-					    <th><button type="submit" class="btn btn-primary">Download</button></th>
+					    <th>
+								<button type="submit" class="btn btn-primary">Download</button>
+								<form class="" action="/auth/file/<%= file._id.originalname%>/<%= file._id.userId %>?_method=DELETE" method="post">
+									<button type="submit" class="btn btn-danger">Delete</button>
+								</form>
+							</th>
 					  </tr>
 	        </form>
 				<% }) %>

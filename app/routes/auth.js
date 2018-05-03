@@ -138,6 +138,18 @@ module.exports = function(router, passport){
 
   });
 
+	router.delete('/file/:name/:id', (req, res) => {
+		mongo.MongoClient.connect(dbUrl, function(error, db) {
+			var bucket = new mongo.GridFSBucket(db);
+			bucket.remove({userId: req.params.id, originalname: req.params.name}, (err, gridStore) => {
+				if(err){
+					return res.status(404).json({err: err});
+				}
+				res.redirect('/profile');
+			});
+		});
+	});
+
 	router.post('/goodbye', function(req, res){
 
 		mongo.connect(dbUrl, function(err, db) {
