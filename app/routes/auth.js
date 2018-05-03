@@ -124,17 +124,24 @@ module.exports = function(router, passport){
 						downloadStream.on('data', function(data) {
 							assert.ok(!gotData);
 							gotData = true;
-							fs.writeFile(tempFile, data, function (err) {
-								if( err ){
-										console.error( err );
+							fs.open(tempFile, 'w+', (err, fd) =>{
+								if(err){
+									console.log(err);
 								}else{
+									
+									fs.writeFile(tempFile, data, function (err) {
+										if( err ){
+											console.error( err );
+										}else{
 
-										res.download(tempFile);
-										res.render('profile.ejs', { user: req.user, files: files});
-										fs.unlinkSync(tempFile);
+											res.download(tempFile);
+											res.render('profile.ejs', { user: req.user, files: files});
+											fs.unlinkSync(tempFile);
 
+										}
+									});
 								}
-							 });
+							});
 						});
 
 						downloadStream.on('end', function() {
