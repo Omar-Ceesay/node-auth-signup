@@ -79,68 +79,67 @@
 
 
 		<!-- LOCAL INFORMATION -->
+		<div class="container">
+			<div class="col-sm-6">
 
-		<div class="col-sm-6">
+				<div class="well">
 
-			<div class="well">
-
-				<h3><span class="fa fa-user"></span> Local</h3>
-
-
-
-					<p>
-
-						<strong>id</strong>: <%= user._id %><br>
-
-						<strong>username</strong>: <%= user.username %><br>
-
-						<strong>password</strong>: <%= user.password %><br>
-
-						<strong>email</strong>: <%= user.email %><br>
-
-						<strong>name</strong>: <%= user.name %>
-
-					</p>
-
-
-			</div>
-
-		</div>
-
-    <div class="col-sm-6">
-
-			<div class="well">
-
-				<h3><span class="fa fa-mail-forward"></span> File Upload</h3>
+					<h3><span class="fa fa-user"></span> Local</h3>
 
 
 
-        <form action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
+						<p>
 
-          <div class="form-group">
+							<strong>id</strong>: <%= user._id %><br>
 
-            <input type="file" class="form" name="file" required="true"></input>
+							<strong>username</strong>: <%= user.username %><br>
 
-          </div>
+							<strong>password</strong>: <%= user.password %><br>
 
-          <button type="submit" class="btn btn-primary">Submit</button>
+							<strong>email</strong>: <%= user.email %><br>
 
-        </form>
-				<button id="myBtn">Open Modal</button>
+							<strong>name</strong>: <%= user.name %>
+
+						</p>
 
 
+				</div>
 
 			</div>
 
+	    <div class="col-sm-6">
 
+				<div class="well">
+
+					<h3><span class="fa fa-mail-forward"></span> File Upload</h3>
+
+
+
+	        <form action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
+
+	          <div class="form-group">
+
+	            <input type="file" class="form" name="file" required="true"></input>
+
+	          </div>
+
+	          <button type="submit" class="btn btn-primary">Submit</button>
+
+	        </form>
+					<button id="myBtn">Open Modal</button>
+
+
+
+				</div>
+
+
+			</div>
 		</div>
 		<div class="col-md-12">
-			<h2>File:</h2>
+			<h2>Files:</h2>
 			<% if(files){ %>
 				<% files.forEach(function(file){ %>
-					<h4><%= file.uploadDate %></h4>
-					<h4><%= file.userId %></h4>
-					<% console.log(file.uploadDate) %>
+					<h4><%= file._id.originalname %></h4>
 				<% }) %>
 			<% }else{ %>
 				<p>No files found</p>

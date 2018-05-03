@@ -85,6 +85,7 @@ module.exports = function(router, passport){
 						res.render('profile.ejs', { user: req.user, files: []});
 					}else{
 						res.render('profile.ejs', { user: req.user, files: files});
+						console.log(files);
 					}
 					// downloadStream.on('data', function(data) {
 					// 	assert.ok(!gotData);
@@ -135,7 +136,7 @@ module.exports = function(router, passport){
 
 				  var bucket = new mongo.GridFSBucket(db);
 					fs.createReadStream("./uploads/"+req.file.filename).
-				    pipe(bucket.openUploadStreamWithId({userId :req.file.filename}, req.user._id)).
+				    pipe(bucket.openUploadStreamWithId({userId : req.file.filename, originalname: req.file.originalname}, req.user._id)).
 				    on('error', function(error) {
 				      assert.ifError(error);
 				    }).
