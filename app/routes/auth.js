@@ -98,7 +98,6 @@ module.exports = function(router, passport){
 
 	router.post('/file/:name/:id', function(req, res){
 
-			console.log(__dirname);
 			var tempFile = __dirname+"/temp/"+req.params.name;
 
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
@@ -112,15 +111,20 @@ module.exports = function(router, passport){
 
 						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
 						var gotData = false;
+						var finData;
 						downloadStream.on('data', function(data) {
 							// assert.ok(!gotData);
 							gotData = true;
+							finData = data;
+						});
+
+						downloadStream.on('end', function() {
 							fs.open(tempFile, 'w+', (err, fd) =>{
 								if(err){
 									console.log(err);
 								}else{
 
-									fs.writeFile(tempFile, data, function (err) {
+									fs.writeFile(tempFile, finData, function (err) {
 										if( err ){
 											console.error( err );
 										}else{
@@ -137,9 +141,6 @@ module.exports = function(router, passport){
 									});
 								}
 							});
-						});
-
-						downloadStream.on('end', function() {
 							assert.ok(gotData);
 						});
 					}
@@ -189,17 +190,6 @@ module.exports = function(router, passport){
 				    }).
 				    on('finish', function() {
 				      console.log('done!');
-							var downloadStream = bucket.openDownloadStreamByName(req.user._id);
-
-					    var gotData = false;
-					    downloadStream.on('data', function(data) {
-					      // assert.ok(!gotData);
-					      gotData = true;
-					    });
-
-					    downloadStream.on('end', function() {
-					      assert.ok(gotData);
-					    });
 
 							res.redirect('/auth/profile');
 							fs.unlinkSync("./uploads/"+req.file.filename);
