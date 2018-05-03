@@ -82,22 +82,23 @@ module.exports = function(router, passport){
 
 					if(files.length === 0 || !files){
 						console.log("NO FILES FOUND");
+						res.render('profile.ejs', { user: req.user, files: []});
 					}else{
+						res.render('profile.ejs', { user: req.user, files: files});
 						console.log(files);
 					}
+					// downloadStream.on('data', function(data) {
+					// 	assert.ok(!gotData);
+					// 	gotData = true;
+					// 	res.render('profile.ejs', { user: req.user, files: data});
+					// });
+					//
+					// downloadStream.on('end', function() {
+					// 	assert.ok(gotData);
+					// });
 
 				});
-				res.render('profile.ejs', { user: req.user});
 				var gotData = false;
-				// downloadStream.on('data', function(data) {
-				// 	assert.ok(!gotData);
-				// 	gotData = true;
-				// 	res.render('profile.ejs', { user: req.user, files: data});
-				// });
-				//
-				// downloadStream.on('end', function() {
-				// 	assert.ok(gotData);
-				// });
 
 			});
   });
