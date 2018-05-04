@@ -2,8 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var port = process.env.PORT || 8080;
-//var dbUrl = 'mongodb://localhost/ReactApp';
-var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
+var dbUrl = process.env.dbUrl || 'mongodb://localhost/ReactApp';
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -14,6 +13,7 @@ var passport = require('passport');
 var flash = require('connect-flash');
 var MongoStore = require('connect-mongo')(session);
 var io = require('socket.io')(http);
+var methodOverride = require("method-override");
 
 mongoose.connect(dbUrl, function(err, response){
   if(err){
@@ -28,6 +28,7 @@ require('./config/passport')(passport);
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(methodOverride("_method"));
 app.use(session({secret: 'anystringoftext',
 				 saveUninitialized: true,
 				 resave: true,

@@ -1,13 +1,16 @@
 var User = require('../models/user');
 var mongo = require('mongodb');
 //var dbUrl = 'mongodb://localhost/ReactApp';
-var dbUrl = 'mongodb://oceesay:oman531999@ds117919.mlab.com:17919/oc_node_db';
+var dbUrl = process.env.dbUrl || 'mongodb://localhost/ReactApp';
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var fs = require('fs');
 var multer  = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var request = require('superagent');
+var Grid = require('gridfs-stream');
+
+var gfs = Grid(dbUrl, mongo);
 
 module.exports = function(router, passport){
 
@@ -141,11 +144,11 @@ module.exports = function(router, passport){
 	router.delete('/file/delete/:name/:id', (req, res) => {
 		mongo.MongoClient.connect(dbUrl, function(error, db) {
 			var bucket = new mongo.GridFSBucket(db);
-			bucket.remove({userId: req.params.id, originalname: req.params.name}, (err, gridStore) => {
+			bucket.delete({userId: req.params.id, originalname: req.params.name}, (err) => {
 				if(err){
 					return res.status(404).json({err: err});
 				}
-				res.redirect('/profile');
+				res.redirect('/auth/profile');
 			});
 		});
 	});
