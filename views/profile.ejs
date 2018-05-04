@@ -148,20 +148,20 @@
 			</div>
 		</div>
 		<div class="col-md-12">
-			<h2>Files:</h2>
+			<h2 style="text-align:center;">Files</h2>
 			<% if(files){ %>
 				<table style="width:100%">
 				<% files.forEach(function(file){ %>
-					<form action="/auth/file/<%= file._id.originalname%>/<%= file._id.userId %>" class="form" method="post">
+					<form action="/auth/file/<%= file._id.originalname%>/<%= file._id.userId %>" class="col-md-2" method="post">
 					  <tr>
 					    <th><input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input></th>
 					    <th><input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled></input></th>
 					    <th>
 								<button type="submit" class="btn btn-primary">Download</button>
 					</form>
-								<form class="" action="/auth/file/delete/<%= file._id.originalname%>/<%= file._id.userId %>?_method=DELETE" method="POST">
-									<button class="btn btn-danger">Delete</button>
-								</form>
+					<form class="col-md-2" action="/auth/file/delete/<%= file._id.originalname%>/<%= file._id.userId %>?_method=DELETE" method="POST">
+						<button class="btn btn-danger">Delete</button>
+					</form>
 							</th>
 					  </tr>
 				<% }) %>
