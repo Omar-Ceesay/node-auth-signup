@@ -19,6 +19,7 @@
     "express-session": "latest",
     "gridfs-stream": "^1.1.1",
     "method-override": "^2.3.10",
+    "mongo-watch": "^0.2.8",
     "mongoose": "latest",
     "morgan": "~1.5.2",
     "multer": "^1.3.0",

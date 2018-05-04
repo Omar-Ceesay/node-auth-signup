@@ -3,6 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var port = process.env.PORT || 8080;
 var dbUrl = process.env.dbUrl || 'mongodb://localhost/ReactApp';
+var Message = require('./app/models/message');
 
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
@@ -14,6 +15,9 @@ var flash = require('connect-flash');
 var MongoStore = require('connect-mongo')(session);
 var io = require('socket.io')(http);
 var methodOverride = require("method-override");
+var MongoWatch = require('mongo-watch');
+
+var watcher = new MongoWatch({parser: 'pretty'});
 
 mongoose.connect(dbUrl, function(err, response){
   if(err){
@@ -79,6 +83,23 @@ app.use('/auth', auth);
 var api = express.Router();
 require('./app/routes/api.js')(api, passport);
 app.use('/api', api);
+
+app.post('/room/message/:username', function(req, res){
+  var socket = io.of('/room');
+  var newMessage = new Message();
+  newMessage.body = req.body.body;
+  newMessage.uploadDate = Date.now();
+  newMessage.user = req.params.username;
+
+  newMessage.save(function(err){
+    if(err){
+      throw err;
+    }else{
+      socket.emit('chat message', {body: req.body.body, user: req.params.username});
+      res.redirect('/room');
+    }
+  })
+});
 
 
 require('./app/routes.js')(app, passport);

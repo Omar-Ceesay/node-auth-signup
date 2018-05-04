@@ -1,6 +1,5 @@
 var User = require('../models/user');
 var mongo = require('mongodb');
-//var dbUrl = 'mongodb://localhost/ReactApp';
 var dbUrl = process.env.dbUrl || 'mongodb://localhost/ReactApp';
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
@@ -8,9 +7,6 @@ var fs = require('fs');
 var multer  = require('multer');
 var upload = multer({ dest: 'uploads/' });
 var request = require('superagent');
-var Grid = require('gridfs-stream');
-
-var gfs = Grid(dbUrl, mongo);
 
 module.exports = function(router, passport){
 
@@ -119,8 +115,8 @@ module.exports = function(router, passport){
 						});
 
 						downloadStream.pipe(fs.createWriteStream(tempFile).on('error',
-						function(error){
-							console.log(error);
+						function(err){
+							console.log(err);
 						}).on('finish', function(){
 							console.log("Download Complete");
 							res.download(tempFile, req.params.name, function(err){
@@ -201,31 +197,6 @@ module.exports = function(router, passport){
 
 
 	});
-
-
-
-	/*router.get('/:username/:password', function(req, res){
-
-		var newUser = new User();
-
-		newUser.local.username = req.params.username;
-
-		newUser.local.password = req.params.password;
-
-		console.log(newUser.local.username + " " + newUser.local.password);
-
-		newUser.save(function(err){
-
-			if(err)
-
-				throw err;
-
-		});
-
-		res.send("Success!");
-
-	})*/
-
 
 
 	router.get('/logout', function(req, res){

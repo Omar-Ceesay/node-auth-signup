@@ -21,21 +21,20 @@
       <h1>Welcome to room 1 <%= user.username %>!</h1>
     </div>
     <a href="/auth/main" class="btn btn-danger"><span class="fa fa-sign-out"></span> Leave</a>
-    <ul id="messages"></ul>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+    <ul id="messages">
+      <% messages.forEach(function(message){ %>
+        <li><%= message.user %>: <%= message.body %></li>
+      <% }) %>
+    </ul>
+    <form action="/room/message/<%= user.username %>" method="post">
+      <input id="m" autocomplete="off" name="body"/><button type="submit">Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io('/room');
-      $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
-      });
       socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text("<%= user.username %>: "+msg));
+        $('#messages').append($('<li>').text(msg.user+": "+msg.body));
       });
     </script>
   </body>
