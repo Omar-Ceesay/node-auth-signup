@@ -29,7 +29,7 @@
     <form action="/room/message/<%= user.username %>" method="post">
       <input id="m" autocomplete="off" name="body"/><button type="submit">Send</button>
     </form>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://node-auth-signup.herokuapp.com/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io('/room');
