@@ -104,5 +104,5 @@ app.post('/room/message/:username', function(req, res){
 
 require('./app/routes.js')(app, passport);
 
-http.listen(port);
+http.listen(port, "0.0.0.0");
 console.log('Server running on port: ' + port);
