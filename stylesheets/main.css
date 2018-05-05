@@ -36,3 +36,8 @@
     text-decoration: none;
     cursor: pointer;
 }
+@media (min-width: 200px) and (max-width: 1200px){
+  li {
+    font-size: 48px;
+  }
+}

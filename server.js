@@ -49,10 +49,12 @@ room1.on('connection', function(socket){
     room1.emit('chat message', msg);
   });
   room1.on('connection', function(socket){
-  socket.broadcast.emit('User has connected');
+    socket.broadcast.emit('User has connected');
+    console.log("socket bop-it");
   });
   room1.on('disconnect', function(socket){
-  socket.broadcast.emit('User has disconnected');
+    socket.broadcast.emit('User has disconnected');
+    console.log(socket);
   });
 });
 
