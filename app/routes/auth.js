@@ -1,12 +1,21 @@
-var User = require('../models/user');
-var mongo = require('mongodb');
-var dbUrl = process.env.dbUrl || 'mongodb://localhost/ReactApp';
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-var fs = require('fs');
-var multer  = require('multer');
-var upload = multer({ dest: 'uploads/' });
-var request = require('superagent');
+const User = require('../models/user');
+const mongo = require('mongodb');
+const dbUrl = process.env.dbUrl || 'mongodb://127.0.0.1/FileServer';
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const fs = require('fs');
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const request = require('superagent');
+const fileUpload = require('express-fileupload');
+var stream = require('stream');
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 
 module.exports = function(router, passport){
 
@@ -68,25 +77,15 @@ module.exports = function(router, passport){
 
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
-				bucket.find({filename: req.user._id}).toArray((err, files) => {
-
+				bucket.find({metadata: {
+					ownerID: req.user._id.toString()
+				}}).toArray((err, files) => {
 					if(files.length === 0 || !files){
-						console.log("NO FILES FOUND");
+						console.log("NO FILES FOUND FOR "+req.user._id);
 						res.render('profile.ejs', { user: req.user, files: []});
 					}else{
+
 						res.render('profile.ejs', { user: req.user, files: files});
-
-						var downloadStream = bucket.openDownloadStream({userId: files[0]._id.userId, originalname: files[0]._id.originalname});
-
-						var gotData = false;
-						downloadStream.on('data', function(data) {
-							// assert.ok(!gotData);
-							gotData = true;
-						});
-
-						downloadStream.on('end', function() {
-							assert.ok(gotData);
-						});
 					}
 
 				});
@@ -97,52 +96,49 @@ module.exports = function(router, passport){
 
 	router.post('/file/:name/:id', function(req, res){
 
-			var tempFile = __dirname+"/temp/"+req.params.name;
+			var tempFile = __dirname+"/temp/"+req.params.id;
 
 			mongo.MongoClient.connect(dbUrl, function(error, db) {
 				var bucket = new mongo.GridFSBucket(db);
-				bucket.find({filename: req.user._id}).toArray((err, files) => {
+				bucket.find({metadata: {
+					ownerID: req.user._id.toString()
+				}}).toArray((err, files) => {
 
-					if(files.length === 0 || !files){
-						console.log("NO FILES FOUND");
-						res.render('profile.ejs', { user: req.user, files: []});
+
+					if(err){
+						return res.status(400).send(err);
 					}else{
+						ObjectId = require('mongodb').ObjectID;
+						const file_id = ObjectId(req.params.id);
+						var downloadStream = bucket.openDownloadStream(file_id);
 
-						var downloadStream = bucket.openDownloadStream({userId: req.params.id, originalname: req.params.name});
-						var gotData = false;
-						downloadStream.on('data', function(data) {
-							gotData = true;
-						});
-
-						downloadStream.pipe(fs.createWriteStream(tempFile).on('error',
-						function(err){
-							console.log(err);
-						}).on('finish', function(){
-							console.log("Download Complete");
+					    downloadStream.pipe(fs.createWriteStream(tempFile).on('error', function(err){
+					    	console.log(err);
+					    }).on('finish', function(){
 							res.download(tempFile, req.params.name, function(err){
 								if(err){
 									console.log(err)
 								}else{
+					    			console.log("Download Complete");
 									fs.unlinkSync(tempFile);
 								};
 							});
-						}));
-
+					    }));
 					}
-
 				});
-				var gotData = false;
 
 			});
 
-  });
+	});
 
-	router.delete('/file/delete/:name/:id', (req, res) => {
+	router.post('/file/remove/:name/:id', (req, res) => {
 		mongo.MongoClient.connect(dbUrl, function(error, db) {
 			var bucket = new mongo.GridFSBucket(db);
-			bucket.delete({userId: req.params.id, originalname: req.params.name}, (err) => {
+			ObjectId = require('mongodb').ObjectID;
+			const file_id = ObjectId(req.params.id);
+			bucket.delete(file_id, (err) => {
 				if(err){
-					return res.status(404).json({err: err});
+					return console.log(err);
 				}
 				res.redirect('/auth/profile');
 			});
@@ -157,44 +153,62 @@ module.exports = function(router, passport){
 			res.redirect('/');
 		});
 
-  });
+  	});
 
-	router.post('/upload', upload.single('file'), function(req, res){
+	router.post('/upload', function(req, res){
+		const files = req.files.file;
+		let id = req.user._id;
+		id = id.toString();
+		
+		mongo.MongoClient.connect(dbUrl, function(error, db){
 
-		var file = '/' + req.file.filename;
-		fs.readFile( req.file.path, function (err, data) {
-			fs.writeFile(file, data, function (err) {
-			 if( err ){
-						console.error( err );
-						response = {
-								 message: 'Sorry, file couldn\'t be uploaded.',
-								 filename: req.file.originalname
-						};
-			 }else{
-						 response = {
-								 message: 'File uploaded successfully',
-								 filename: req.file.originalname
-						};
-				}
-				mongo.MongoClient.connect(dbUrl, function(error, db) {
-				  assert.ifError(error);
-
-				  var bucket = new mongo.GridFSBucket(db);
-					fs.createReadStream("./uploads/"+req.file.filename).
-				    pipe(bucket.openUploadStreamWithId({userId : req.file.filename, originalname: req.file.originalname}, req.user._id)).
-				    on('error', function(error) {
-				      assert.ifError(error);
-				    }).
-				    on('finish', function() {
-				      console.log('done!');
-
-							res.redirect('/auth/profile');
-							fs.unlinkSync("./uploads/"+req.file.filename);
-				    });
+			var bucket = new mongo.GridFSBucket(db);
+			if(files.length){
+				console.log("multiple files found\n");
+				let count = 0;
+				var loop = new Promise((resolve, reject) => {
+					files.forEach(function(e, i){
+						console.log("Fire",i);
+						Object.assign(e, {ownerID: id});
+						var bufferStream = new stream.PassThrough();
+						bufferStream.end(e.data);
+						var uploadStream = bucket.openUploadStream(e.name, {
+							chunkSizeBytes: null,
+							metadata: {ownerID : id},
+							contentType: null,
+							aliases: null
+						});
+						
+						uploadStream.once('finish', function(){
+							console.log("Finished \n\t"+e.name+" ::="+i);
+							count++;
+							if(count === files.length){
+								resolve("Done");
+							}
+						});
+						bufferStream.pipe(uploadStream);
+					});
 				});
-			 });
-		 });
-
+				loop.then(function(value){
+					console.log(value);
+					res.redirect('/auth/profile');
+				})
+			}else{
+				var bufferStream = new stream.PassThrough();
+				bufferStream.end(files.data);
+				var uploadStream = bucket.openUploadStream(files.name, {
+						chunkSizeBytes: null,
+						metadata: {ownerID : id},
+						contentType: null,
+						aliases: null
+					});
+				
+				uploadStream.once('finish', function(){
+					res.redirect('/auth/profile');
+				});
+				bufferStream.pipe(uploadStream);
+			}
+		})
 
 	});
 
@@ -202,7 +216,6 @@ module.exports = function(router, passport){
 	router.get('/logout', function(req, res){
 
 		req.logout();
-
 		res.redirect('/');
 
 	})
@@ -210,35 +223,20 @@ module.exports = function(router, passport){
 
 
   function isLoggedIn(req, res, next){
-
     if(req.isAuthenticated()){
-
       return next();
-
     }else{
-
       res.redirect('/auth/login');
-
     }
-
   }
 
 
 
   function isLoggedInIndex(req, res, next){
-
     if(req.isAuthenticated()){
-
       return next();
-
     }else{
-
       res.redirect('/auth/login');
-
     }
-
   }
-
-
-
 };

@@ -6,10 +6,8 @@
 
 	<title>Node Authentication</title>
 
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-	<link rel="stlyesheet" href="../stylesheets/main.css">
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> <!-- load bootstrap css -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
 	<style>
 
 		body 		{ padding-top:80px; word-wrap:break-word; }
@@ -53,38 +51,58 @@
 		}
 
 		table {
-		    font-family: arial, sans-serif;
 		    border-collapse: collapse;
 		    width: 100%;
 		}
 
-		td, th {
-		    border: 1px solid #dddddd;
+		th, td {
 		    text-align: left;
 		    padding: 8px;
+		    overflow: auto;
+		    max-width: 155px;
+		    max-height: 45px;
 		}
 
-		tr:nth-child(even) {
-		    background-color: #dddddd;
+		td {
+			overflow: auto;
+		}
+
+		td:last-child {
+			padding: 8px 0px;
+		}
+
+		.overlay {  
+		  display: none;
+		  justify-content: center;
+		  align-items: center;
+		  position: absolute;
+		  z-index: 2;
+		  opacity: 1;
+		  margin: -1px 0px -1px -1px;
+		  background: rgba(39, 42, 43, 0.8);
+		  transition: opacity 200ms ease-in-out;
+		  border-radius: 4px;
+		  &:hover {
+		    opacity: 1;
+		  }
 		}
 
 	</style>
 
 </head>
 
-<body>
-
+<body class="bg-dark text-white">
 <div class="container">
 
 
 
-	<div class="page-header text-center">
+	<div class="pb-2 mt-2 mb-2 border-bottom text-center">
 
-		<h1><span class="fa fa-anchor"></span> Profile Page</h1>
+		<h1><span class="fa fa-anchor text-info"></span> Profile Page</h1>
 
-    <a href="/auth/main" class="btn btn-default btn-sm">Home</a>
+	    <a href="/auth/main" class="btn btn-secondary btn-sm">Home</a>
 
-		<a href="/auth/logout" class="btn btn-default btn-sm">Logout</a>
+		<a href="/auth/logout" class="btn btn-secondary btn-sm">Logout</a>
 
 	</div>
 
@@ -96,79 +114,102 @@
 
 		<!-- LOCAL INFORMATION -->
 		<div class="container">
-			<div class="col-sm-6">
+			<div>
+				
+			
+				<div class="card-deck">
 
-				<div class="well">
-
-					<h3><span class="fa fa-user"></span> Local</h3>
-
-
-
-						<p>
-
-							<strong>id</strong>: <%= user._id %><br>
-
-							<strong>username</strong>: <%= user.username %><br>
-
-							<strong>password</strong>: <%= user.password %><br>
-
-							<strong>email</strong>: <%= user.email %><br>
-
-							<strong>name</strong>: <%= user.name %>
-
-						</p>
+					<div class="card text-white bg-secondary">
+						<div class="card-header bg-transparent">	
+							<h3><span class="fa fa-user"></span> Local</h3>
+						</div>
+						<div class="card-body">
+						    
 
 
+							<p>
+
+								<strong>id</strong>: <%= user._id %><br>
+
+								<strong>username</strong>: <%= user.username %><br>
+
+								<strong>password</strong>: <%= user.password %><br>
+
+								<strong>email</strong>: <%= user.email %><br>
+
+								<strong>name</strong>: <%= user.name %>
+
+							</p>
+
+						</div>
+
+					</div>
+					<div class="card text-white bg-secondary">
+						<div class="overlay" id="overlay">
+							<div class="bg-primary pb-2 pt-2 pr-3 pl-3 text-center rounded">
+							<i class="fa fa-refresh fa-spin" style="font-size:32px"></i>
+							</div>
+						</div>
+						<div class="card-header bg-transparent">
+							<h3><span class="fa fa-mail-forward"></span> File Upload</h3>
+						</div>
+						<div class="card-body">
+							
+			        		<form id="fileUpload" action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
+				        		<div class="custom-file mb-3">
+				        			<input type="file" class="custom-file-input" name="file" required="true" multiple></input>
+				        			<label class="custom-file-label">Choose Files</label>
+				            	</div>
+				        		<button type="submit" class="btn btn-primary">Submit</button>
+								<button id="myBtn" class="btn btn-danger">Delete Account</button>
+								<button id="myBtn" class="btn btn-dark">Delete Account</button>
+			        		</form>
+						</div>
+					</div>
 				</div>
-
-			</div>
-
-	    <div class="col-sm-6">
-
-				<div class="well">
-
-					<h3><span class="fa fa-mail-forward"></span> File Upload</h3>
-
-	        <form action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
-
-	          <div class="form-group">
-
-	            <input type="file" class="form" name="file" required="true"></input>
-
-	          </div>
-
-	          <button type="submit" class="btn btn-primary">Submit</button>
-
-	        </form>
-					<button id="myBtn" class="btn btn-danger">Delete Account</button>
-
-				</div>
-
-
 			</div>
 		</div>
-		<div class="col-md-12">
-			<h2 style="text-align:center;">Files</h2>
+		<div class="col-md-12 mt-2">
+			<div class="border-bottom mb-1">
+				<h2 class="text-center">Files</h2>
+			</div>
 			<% if(files){ %>
-				<table style="width:100%">
+			<table class="table table-striped table-dark">
+				<thead class="thead-dark">
+					<tr>
+						<th>Name</th>
+						<th>Upload Date</th>
+						<th>Actions</th>
+					</th>
+				</thead>
+				<tbody>
 				<% files.forEach(function(file){ %>
-					<form action="/auth/file/<%= file._id.originalname%>/<%= file._id.userId %>" class="col-md-2" method="post">
-					  <tr>
-					    <th><input type="text" class="form" name="originalname" required="true" value="<%= file._id.originalname %>" disabled></input></th>
-					    <th><input type="text" class="form" name="userId" required="true" value="<%= file._id.userId %>" disabled></input></th>
-					    <th>
-								<button type="submit" class="btn btn-primary">Download</button>
-					</form>
-					<form class="col-md-2" action="/auth/file/delete/<%= file._id.originalname%>/<%= file._id.userId %>?_method=DELETE" method="POST">
-						<button class="btn btn-danger">Delete</button>
-					</form>
-							</th>
-					  </tr>
+					<tr id="file" class="MainList" name="<%= file.filename %>">
+						<td style="overflow: auto;">
+							<%= file.filename %>
+						</td>
+						<td style="overflow: auto;">
+							<%= file.uploadDate %>
+						</td>
+						<td style="padding: 8px 0px">
+							<div class="btn-group bigScreen col-md-12">
+								<form action="/auth/file/<%=file.filename%>/<%=file._id%>" class="mr-1" method="post">
+									<button type="submit" class="btn btn-primary">Download</button>
+								</form>
+								<form style="padding: 0px; display: inline" action="/auth/file/remove/<%=file.filename%>/<%=file._id%>" class="" method="post">
+									<button type="submit" class="btn btn-danger">Delete</button>
+								</form>
+							</div>
+						</td>
+					</tr>
 				<% }) %>
+				<% }if(files == ""){ %>
+					<tr class="table-secondary">
+						<td class="text-center font-weight-bold text-danger" colspan="3">No files found</td>
+					</tr>
+				<% } %>
+				</tbody>
 			</table>
-			<% }else{ %>
-				<p>No files found</p>
-			<% } %>
 		</div>
 
 
@@ -190,7 +231,9 @@
 	</div>
 
 </div>
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	// Get the modal
 	var modal = document.getElementById('myModal');
@@ -217,6 +260,38 @@
 				modal.style.display = "none";
 		}
 	}
+
+	function overlayOn() {
+	    document.getElementById("overlay").style.display = "block";
+	}
+
+	function overlayOff() {
+	    document.getElementById("overlay").style.display = "none";
+	}
+	$("#fileUpload").on("submit", function(e){
+	    document.getElementById("overlay").style.display = "flex";
+	    $(".custom-file-input").attr("hidden", "hidden");
+	});
+
+	var sizeTheOverlays = function() {
+	    $(".overlay").resize().each(function() {
+	    var h = $(this).parent().outerHeight();
+	    var w = $(this).parent().outerWidth();
+	    $(this).css("height", h);
+	    $(this).css("width", w);
+	  });
+	};
+
+	sizeTheOverlays();
+
+
+	var width = $(window).width();
+	$(window).resize(function(){
+	   if($(this).width() != width){
+	      width = $(this).width();
+	      sizeTheOverlays();
+	   }
+	});
 </script>
 
 </body>

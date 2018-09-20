@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var port = process.env.PORT || 8080;
-var dbUrl = process.env.dbUrl || 'mongodb://localhost/ReactApp';
+var dbUrl = process.env.dbUrl || 'mongodb://127.0.0.1/FileServer';
 var Message = require('./app/models/message');
 
 var cookieParser = require('cookie-parser');
@@ -16,6 +16,7 @@ var MongoStore = require('connect-mongo')(session);
 var io = require('socket.io')(http);
 var methodOverride = require("method-override");
 var MongoWatch = require('mongo-watch');
+const fileUpload = require('express-fileupload');
 
 var watcher = new MongoWatch({parser: 'pretty'});
 
@@ -31,6 +32,7 @@ require('./config/passport')(passport);
 
 app.use(morgan('dev'));
 app.use(cookieParser());
+app.use(fileUpload());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride("_method"));
 app.use(session({secret: 'anystringoftext',
@@ -48,13 +50,8 @@ room1.on('connection', function(socket){
   socket.on('chat message', function(msg){
     room1.emit('chat message', msg);
   });
-  room1.on('connection', function(socket){
-    socket.broadcast.emit('User has connected');
-    console.log("socket bop-it");
-  });
   room1.on('disconnect', function(socket){
     socket.broadcast.emit('User has disconnected');
-    console.log(socket);
   });
 });
 
@@ -86,19 +83,21 @@ var api = express.Router();
 require('./app/routes/api.js')(api, passport);
 app.use('/api', api);
 
-app.post('/room/message/:username', function(req, res){
+app.post('/room/message', function(req, res){
+console.log("New Message!\n\t");
+  console.log(req.body);
   var socket = io.of('/room');
   var newMessage = new Message();
-  newMessage.body = req.body.body;
+  newMessage.body = req.body.message;
   newMessage.uploadDate = Date.now();
-  newMessage.user = req.params.username;
+  newMessage.user = req.body.username;
 
   newMessage.save(function(err){
     if(err){
       throw err;
     }else{
-      socket.emit('chat message', {body: req.body.body, user: req.params.username});
-      res.redirect('/room');
+      socket.emit('chat message', {body: req.body.message, user: req.body.username});
+      // res.redirect('/room');
     }
   })
 });

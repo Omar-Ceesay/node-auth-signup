@@ -4,41 +4,82 @@
     <title>Socket.IO chat</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" type="text/css" href="../bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="../font-awesome.min.css"> <!-- load fontawesome -->
 
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <!-- This above should be taken out -->
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      .messageBar { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
+      #messages li { padding: 5px 10px; margin-bottom: 15px;}
       #messages li:nth-child(odd) { background: #eee; }
+      @media (min-width: 200px) and (max-width: 1200px){
+        body {
+          font-size: 52px;
+          margin-bottom: 15px;
+        }
+      }
+      .body{
+        padding-bottom: 50px;
+      }
     </style>
 
-    <link rel="stylesheet" href="https://node-auth-signup.herokuapp.com/app/stylesheets/main.css">
+    <link rel="stylesheet" href="./main.css">
 
   </head>
-  <body>
+  <body id="body">
     <div class="jumbotron text-center">
       <h1>Welcome to room 1 <%= user.username %>!</h1>
     </div>
-    <a href="/auth/main" class="btn btn-danger"><span class="fa fa-sign-out"></span> Leave</a>
-    <ul id="messages">
-      <% messages.forEach(function(message){ %>
-        <li><%= message.user %>: <%= message.body %></li>
-      <% }) %>
-    </ul>
-    <form action="/room/message/<%= user.username %>" method="post">
-      <input id="m" autocomplete="off" name="body"/><button type="submit">Send</button>
-    </form>
+    <div class="container-fluid body">
+      <a href="/auth/main" class="btn btn-danger"><span class="fa fa-sign-out"></span> Leave</a>
+      <ul id="messages">
+        <% messages.forEach(function(message){ %>
+          <li><%= message.user %>: <%= message.body %></li>
+          <% }) %>
+        </ul>
+    </div>
+    <div class="messageBar">
+      <input id="m" autocomplete="off" name="body" id="sumbitMessage" type="text" /><button type="" onclick="sendMessage({username: '<%= user.username %>'})">Send</button>
+    </div>
     <script src="https://node-auth-signup.herokuapp.com/socket.io/socket.io.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io('/room');
       socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(msg.user+": "+msg.body));
+      });
+      
+      function sendMessage(msg){
+        var input = $('input').val();
+        Object.assign(msg, {message: input});
+        $('input').val('');
+        $.post(`/room/message`, msg, function(res){
+          $('#messages').append($('<li>').text(res.user+": "+res.body));
+          var element = document.getElementById("body");
+          element.scrollTop = element.scrollHeight - element.clientHeight;
+        })
+      }
+
+      $(document).keypress(function(e) {
+        if(e.which == 13) {
+            var input = $('input').val();
+            var msg = {
+              username: "<%=user.username%>",
+              message: input
+            }
+            $('input').val('');
+            $.post(`/room/message`, msg, function(res){
+              $('#messages').append($('<li>').text(res.user+": "+res.body));
+              var element = document.getElementById("body");
+              element.scrollTop = element.scrollHeight - element.clientHeight;
+            })
+        }
       });
     </script>
   </body>
