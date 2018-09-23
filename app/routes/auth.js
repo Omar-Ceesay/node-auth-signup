@@ -65,6 +65,8 @@ module.exports = function(router, passport){
 
 		successRedirect: '/',
 
+		errorRedirect: '/error',
+
 		failureRedirect: '/auth/signup',
 
 		failureFlash: true
@@ -210,6 +212,16 @@ module.exports = function(router, passport){
 			}
 		})
 
+	});
+
+	router.post('/:id/addFolder', function(req, res){
+		console.log(req.body);
+
+		mongo.MongoClient.connect(dbUrl, function(error, db){
+			User.findOne({'usernameUpper': req.user.username.toUpperCase()}, function(err, user){
+				console.log(user);
+			})
+		})
 	});
 
 

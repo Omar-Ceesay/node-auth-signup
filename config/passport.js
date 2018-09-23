@@ -10,10 +10,14 @@ var User = require('../app/models/user');
 
 
 module.exports = function(passport){
-
+  console.log(passport)
   passport.serializeUser(function(user, done){
 
-    done(null, user.id);
+    if (user) {
+        done(null, user._id);
+    } else {
+        done(null, req.flash("WOW SO FAIL"));
+    }
 
   })
 
@@ -41,6 +45,7 @@ module.exports = function(passport){
 
   },
 
+
   function(req, username, password, done){
     var mail = req.body.email;
 
@@ -53,15 +58,33 @@ module.exports = function(passport){
 
           return done(err);
 
-        }else if(user){
+        }else if(req.body.email.length < 1){
 
-          return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+          return done(null, false, req.flash('signupMessage', "You must enter an email."));
+
+        }else if(req.body.name.length < 1){
+
+          return done(null, false, req.flash('signupMessage', "You must enter a name."));
+
+        }else if(password.length < 4){
+          //this won't even work because if a user doesn't enter any thing in
+          // the password field... serializeUser won't run
+          return done(null, false, req.flash('signupMessage', "You must enter a password with more than 3 characters"));
+
+        }else if(username.length < 1){
+          //this won't even work because if a user doesn't enter any thing in
+          // the username field... serializeUser won't run
+          return done(null, false, req.flash('signupMessage', "You must enter an username."));
+
+        }else if(user){
+          var x = req.body.name.length < 1;
+          return done(null, false, req.flash('signupMessage', "That username is already taken."));
 
         }else if(User.findOne({'email': req.body.email}, function(err, email){
           if(err){
             return done(err);
           }else if (email) {
-            return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+            return done(null, false, req.flash('signupMessage', "That email is already taken."));
           }else{
             var newUser = new User();
             newUser.username = username;

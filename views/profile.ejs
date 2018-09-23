@@ -87,6 +87,10 @@
 		  }
 		}
 
+		.custom-file-label {
+			overflow: hidden;
+		}
+
 	</style>
 
 </head>
@@ -157,12 +161,12 @@
 							
 			        		<form id="fileUpload" action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
 				        		<div class="custom-file mb-3">
-				        			<input type="file" class="custom-file-input" name="file" required="true" multiple></input>
-				        			<label class="custom-file-label">Choose Files</label>
+				        			<input id="fileInputGroup" type="file" class="custom-file-input" name="file" required="true" multiple></input>
+				        			<label class="custom-file-label" for="fileInputGroup">Choose files</label>
 				            	</div>
 				        		<button type="submit" class="btn btn-primary">Submit</button>
-								<button id="myBtn" class="btn btn-danger">Delete Account</button>
-								<button id="myBtn" class="btn btn-dark">Delete Account</button>
+								<span id="myBtn" class="btn btn-danger">Delete Account</span>
+								<button id="addFolder" class="btn btn-dark" onclick="addFolder()">Add Folder</button>
 			        		</form>
 						</div>
 					</div>
@@ -224,22 +228,37 @@
 	<!-- Modal content -->
 	<div class="modal-content">
 		<span class="close">&times;</span>
-		<p>Are you sure you want to deactivate your account?</p>
+		<p class="text-dark">Are you sure you want to deactivate your account?</p>
 		<form action="/auth/goodbye" method="post">
-			<button type="submit" class="btn btn-danger"><span class="fa fa-frown-o"></span> Yes</button>  <button class="btn btn-success"><span class="fa fa-smile-o"></span> No</button>
+			<button type="submit" class="btn btn-danger"><span class="fa fa-frown-o"></span> Yes</button>  <h3 onclick="closeModal()" class="btn btn-success mt-2"><span class="fa fa-smile-o"></span> No</h3>
 		</form>
 	</div>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<div id="addFolder-modal" class="modal text-dark">
+
+	<!-- Modal content -->
+	<div class="modal-content">
+		<span class="close">&times;</span>
+		<p class="text-dark">Enter folder name</p>
+		<div class="form-group">	
+			<input type="text" class="form-control" name="folderName"/>
+			<button class="btn btn-success" onclick="addFolder()">Add Folder</button>
+		</div>
+	</div>
+	
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type="text/javascript">
 	// Get the modal
 	var modal = document.getElementById('myModal');
+	var addFolderModal = document.getElementById('addFolder-modal');
 
 	// Get the button that opens the modal
 	var btn = document.getElementById("myBtn");
+	var btn2 = document.getElementById("addFolder");
 
 	// Get the <span> element that closes the modal
 	var span = document.getElementsByClassName("close")[0];
@@ -249,15 +268,24 @@
 		modal.style.display = "block";
 	}
 
+	btn2.onclick = function() {
+		addFolderModal.style.display = "block";
+	}
+
 	// When the user clicks on <span> (x), close the modal
 	span.onclick = function() {
 		modal.style.display = "none";
 	}
 
+	function closeModal(){
+		modal.style.display = "none";
+	}
+
 	// When the user clicks anywhere outside of the modal, close it
 	window.onclick = function(event) {
-		if (event.target == modal) {
+		if (event.target == modal || event.target == addFolderModal) {
 				modal.style.display = "none";
+				addFolderModal.style.display = "none";
 		}
 	}
 
@@ -292,6 +320,32 @@
 	      sizeTheOverlays();
 	   }
 	});
+
+	$('#fileInputGroup').on('change',function(){
+        //get the file name
+        var filesLength = $('#fileInputGroup').get(0).files.length;
+        var fileName = $(this).val();
+        var showThis;
+        console.log(filesLength)
+        //replace the "Choose a file" label
+        if(filesLength > 1){
+    		showThis = filesLength + " files selected";
+    	}else{
+    		showThis = fileName;
+    	}
+        $(this).next('.custom-file-label').html(showThis);
+    });
+
+	function addFolder(){
+		var name = $('[name="folderName"]').val();
+		addFolderModal.style.display = "none";
+		$('[name="folderName"]').val("");
+
+		$.post("/auth/<%=user.id%>/addFolder", {name: name}, function(data){
+
+		});
+
+	}
 </script>
 
 </body>

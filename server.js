@@ -30,10 +30,10 @@ mongoose.connect(dbUrl, function(err, response){
 });
 require('./config/passport')(passport);
 
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(fileUpload());
-app.use(bodyParser.urlencoded({extended: false}));
 app.use(methodOverride("_method"));
 app.use(session({secret: 'anystringoftext',
 				 saveUninitialized: true,
