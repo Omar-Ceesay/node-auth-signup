@@ -7,7 +7,7 @@
 	<title>Node Authentication</title>
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> <!-- load bootstrap css -->
-		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
 	<style>
 
 		body 		{ padding-top:80px; word-wrap:break-word; }
@@ -91,6 +91,38 @@
 			overflow: hidden;
 		}
 
+		.progress{
+			width: 90%;
+			height: 26px;
+		}
+
+		#percent{
+			position: absolute;
+		    left: 44%;
+		    top: 46%;
+		}
+
+		#box {
+		   width:100%;
+		   height:100%;
+		}
+
+		#box img {
+			width :100%;
+		}
+
+		.btn-to-link{
+			background:none!important;
+		    color:inherit;
+		    border:none; 
+		    padding:0!important;
+		    font: inherit;
+		}
+
+		.bigScreen{
+			display: inline-flex;
+		}
+
 	</style>
 
 </head>
@@ -104,6 +136,7 @@
 
 		<h1><span class="fa fa-anchor text-info"></span> Profile Page</h1>
 
+		<a href="/auth/player" class="btn btn-secondary btn-sm">Player</a>
 	    <a href="/auth/main" class="btn btn-secondary btn-sm">Home</a>
 
 		<a href="/auth/logout" class="btn btn-secondary btn-sm">Logout</a>
@@ -117,9 +150,7 @@
 
 
 		<!-- LOCAL INFORMATION -->
-		<div class="container">
-			<div>
-				
+		<div class="container">				
 			
 				<div class="card-deck">
 
@@ -146,38 +177,91 @@
 							</p>
 
 						</div>
-
 					</div>
+
 					<div class="card text-white bg-secondary">
 						<div class="overlay" id="overlay">
-							<div class="bg-primary pb-2 pt-2 pr-3 pl-3 text-center rounded">
-							<i class="fa fa-refresh fa-spin" style="font-size:32px"></i>
+							<!-- <div class="bg-primary pb-2 pt-2 pr-3 pl-3 text-center rounded">
+								<i class="fa fa-refresh fa-spin" style="font-size:32px"></i>
+							</div> -->
+							<div class="progress">
+								<div class="text-dark font-weight-bold" id="percent">0%</div>
+								<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
 							</div>
 						</div>
 						<div class="card-header bg-transparent">
-							<h3><span class="fa fa-mail-forward"></span> File Upload</h3>
+							<h3><span class="fa fa-cloud-upload-alt"></span> File Upload</h3>
 						</div>
 						<div class="card-body">
 							
-			        		<form id="fileUpload" action="/auth/upload" class="form" method="post" enctype="multipart/form-data">
+			        		<form id="fileUpload" action="/auth/upload" class="form" method="post" name="fileUpload" enctype="multipart/form-data">
 				        		<div class="custom-file mb-3">
 				        			<input id="fileInputGroup" type="file" class="custom-file-input" name="file" required="true" multiple></input>
 				        			<label class="custom-file-label" for="fileInputGroup">Choose files</label>
 				            	</div>
-				        		<button type="submit" class="btn btn-primary">Submit</button>
+				        		<button name="fileSubmit" type="submit" class="btn btn-primary">Submit</button>
 								<span id="myBtn" class="btn btn-danger">Delete Account</span>
-								<button id="addFolder" class="btn btn-dark" onclick="addFolder()">Add Folder</button>
+								
 			        		</form>
 						</div>
 					</div>
+
 				</div>
-			</div>
+				<div class="card-deck mt-2">
+					
+					<div class="card text-white bg-secondary">
+						<div class="overlay" id="overlay">
+							<!-- <div class="bg-primary pb-2 pt-2 pr-3 pl-3 text-center rounded">
+								<i class="fa fa-refresh fa-spin" style="font-size:32px"></i>
+							</div> -->
+							<div class="progress">
+								<div class="text-dark font-weight-bold" id="percent">0%</div>
+								<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progress-bar"></div>
+							</div>
+						</div>
+						<div class="card-header bg-transparent">
+							<h3><span class="fa fa-address-card"></span> Users</h3>
+						</div>
+						<div class="card-body">
+							
+			        		<% if(userlist.length != 0){ %>
+			        			<table class="table-sm table-dark table-hover">
+			        				<thead class="thead-dark">
+			        					<tr>
+			        						<th class="font-weight-bold">#</th>
+			        						<th>Username</th>
+			        						<th>Status</th>
+			        						<th>Actions</th>
+			        					</tr>
+			        				</thead>
+			        				<tbody>
+			        			<% userlist.forEach(function(user, i){ %>
+				        				<tr>
+				        					<td class="font-weight-bold"><%=i+1%></td>
+				        					<td><%=user.username%></td>
+				        					<td class="text-success">Online</td>
+				        					<td>
+				        						<button class="btn btn-success ml-1">Request Connection</button>
+				        					</td>
+				        				</tr>
+			        			<% }) %>
+			        				</tbody>
+			        			</table>
+			        		<% }else if(userlist.length == 0 || userlist == null){%>
+			        			<p>No users found</p> 
+			        		<%}%>
+						</div>
+					</div>
+
+				</div>
+
 		</div>
 		<div class="col-md-12 mt-2">
 			<div class="border-bottom mb-1">
 				<h2 class="text-center">Files</h2>
 			</div>
 			<% if(files){ %>
+			<div class="table-responsive">				
 			<table class="table table-striped table-dark">
 				<thead class="thead-dark">
 					<tr>
@@ -186,26 +270,50 @@
 						<th>Actions</th>
 					</th>
 				</thead>
-				<tbody>
+				<tbody id="tbody">
 				<% files.forEach(function(file){ %>
-					<tr id="file" class="MainList" name="<%= file.filename %>">
-						<td style="overflow: auto;">
-							<%= file.filename %>
-						</td>
-						<td style="overflow: auto;">
-							<%= file.uploadDate %>
-						</td>
-						<td style="padding: 8px 0px">
-							<div class="btn-group bigScreen col-md-12">
-								<form action="/auth/file/<%=file.filename%>/<%=file._id%>" class="mr-1" method="post">
-									<button type="submit" class="btn btn-primary">Download</button>
-								</form>
-								<form style="padding: 0px; display: inline" action="/auth/file/remove/<%=file.filename%>/<%=file._id%>" class="" method="post">
-									<button type="submit" class="btn btn-danger">Delete</button>
-								</form>
-							</div>
-						</td>
-					</tr>
+					<% var afterSlash = /([^/]+)$/; %>
+					<% var filename = file.filename.match(afterSlash); %>
+						<tr id="file" class="file MainList 
+						<% if(filename.index != 0){ %>
+						bg-success
+						<% } %>
+						" name="<%= file.filename %>">
+							<td style="overflow: auto;">
+								<%= filename[0] %>
+							</td>
+							<td style="overflow: auto;">
+								<%= file.uploadDate %>
+							</td>
+							<td style="padding: 8px 0px; overflow: visible;">
+								<div class="bigScreen col-md-12">
+									<div class="dropdown">
+									  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Actions</button>
+									  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									    <form action="/auth/file/<%=file.filename%>/<%=file._id%>" class="dropdown-item" method="post" style="">
+											<button class="btn-to-link" type="submit" style="-webkit-appearance: inherit; cursor: pointer;">Download</button>
+										</form>
+									    <form action="/auth/file/remove/<%=file.filename%>/<%=file._id%>" class="dropdown-item" method="post" style="">
+											<button class="btn-to-link" type="submit" style="-webkit-appearance: inherit; cursor: pointer;">Delete</button>
+										</form>
+									    <a class="dropdown-item" href="#">Something else here</a>
+									  </div>
+									</div>
+									<!-- Different style of download and delete -->
+									<!-- <form action="/auth/file/<%=file.filename%>/<%=file._id%>" class="mr-1" method="post">
+										<a type="submit" class="btn btn-primary">Download</a>
+									</form>
+									<form style="padding: 0px; display: inline" action="/auth/file/remove/<%=file.filename%>/<%=file._id%>" class="" method="post">
+										<button type="submit" class="btn btn-danger">Delete</button>
+									</form> -->
+									<button id="showPicture" class="btn btn-primary" onclick="showPicture('<%=file.filename %>', '<%= file._id %>')">Show Picture</button>
+								</div>
+								<div id="box">
+								   <div id="show<%=file._id%>">
+								   </div>
+								</div>
+							</td>
+						</tr>
 				<% }) %>
 				<% }if(files == ""){ %>
 					<tr class="table-secondary">
@@ -214,6 +322,7 @@
 				<% } %>
 				</tbody>
 			</table>
+			</div>
 		</div>
 
 
@@ -248,10 +357,46 @@
 	</div>
 	
 </div>
+<script src="/socket.io/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script type="text/javascript">
+	var socket = io('/auth/profile', { query: "username=<%=user.username%>" });
+	var sessionid;
+	socket.on('connect', function(data){
+		var currentUser = "<%=user.username%>";
+		sessionid = socket.io.engine.id;
+		
+		console.log("sending online status");
+		socket.emit('online', currentUser.toUpperCase());
+
+		// function sendOnlineStatus(){
+		// 	console.log("sending online status");
+		// 	socket.emit('online', currentUser.toUpperCase());
+		// }
+
+		// setTimeout(sendOnlineStatus, 1000);
+	});
+
+	socket.on('file-data', function(data){
+		data = data.toString();
+
+		$("#progress-bar").width(data+"%");
+		$("#percent").text(data+"%")
+	});
+
+	socket.on('file-finished', function(data){
+		
+		$("#overlay").hide();
+
+		$('#tbody').append($('<tr>').addClass("MainList")
+		.append($('<td>').text(data.filename))
+		.append($('<td>').text(data.date))
+		.append($('<td>').append($('<div>').addClass("btn-group bigScreen col-md-12").append($('<form>').attr('action', `/auth/file/${data.filename}/${data.id}`).attr('method', 'post').addClass("mr-1").append($('<button>').text("Download").addClass("btn btn-primary"))).append($('<form>').attr('action', `/auth/file/remove/${data.filename}/${data.id}`).attr('method', 'post').append($('<button>').text("Delete").addClass("btn btn-danger"))))));
+
+	})
+
 	// Get the modal
 	var modal = document.getElementById('myModal');
 	var addFolderModal = document.getElementById('addFolder-modal');
@@ -266,10 +411,6 @@
 	// When the user clicks on the button, open the modal
 	btn.onclick = function() {
 		modal.style.display = "block";
-	}
-
-	btn2.onclick = function() {
-		addFolderModal.style.display = "block";
 	}
 
 	// When the user clicks on <span> (x), close the modal
@@ -296,10 +437,6 @@
 	function overlayOff() {
 	    document.getElementById("overlay").style.display = "none";
 	}
-	$("#fileUpload").on("submit", function(e){
-	    document.getElementById("overlay").style.display = "flex";
-	    $(".custom-file-input").attr("hidden", "hidden");
-	});
 
 	var sizeTheOverlays = function() {
 	    $(".overlay").resize().each(function() {
@@ -346,6 +483,40 @@
 		});
 
 	}
+
+	$('[name="fileUpload"]').on('submit', function(e){
+		e.preventDefault();
+		document.getElementById("overlay").style.display = "flex";
+		var form = new FormData(this);
+		form.append("socketid", sessionid);
+	    $(".custom-file-input").attr("hidden", "hidden");
+	    $.ajax({
+		    url: "/auth/upload", 
+		    type: "POST",             
+		    data: form,
+		    contentType: false,       
+		    cache: false,             
+		    processData:false, 
+		    success: function(data) {
+		    }
+		});
+
+		// $.post('/auth/upload', $('[name="fileUpload"]').serialize(), function(data){
+
+		// });
+	});
+
+	function showPicture(filename, id){
+
+		$.post("/auth/picture", {filename: filename, id: id}, function(data){
+			var img = data;
+			var where = "#show"+id;
+			$(where).append(data);
+		})
+	}
+
+
+
 </script>
 
 </body>

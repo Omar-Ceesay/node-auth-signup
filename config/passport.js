@@ -10,7 +10,6 @@ var User = require('../app/models/user');
 
 
 module.exports = function(passport){
-  console.log(passport)
   passport.serializeUser(function(user, done){
 
     if (user) {
