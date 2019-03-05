@@ -16,12 +16,12 @@ var flash = require('connect-flash');
 var MongoStore = require('connect-mongo')(session);
 var io = require('socket.io')(http);
 var methodOverride = require("method-override");
-var MongoWatch = require('mongo-watch');
+//var MongoWatch = require('mongo-watch');
 const busboy = require('connect-busboy');
 var findRemoveSync = require('find-remove');
 const fs = require('fs');
 
-var watcher = new MongoWatch({parser: 'pretty'});
+//var watcher = new MongoWatch({parser: 'pretty'});
 
 mongoose.connect(dbUrl, function(err, response){
   if(err){
