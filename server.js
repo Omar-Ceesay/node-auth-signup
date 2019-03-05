@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var port = process.env.PORT || 8080;
-var dbUrl = process.env.dbUrl;
+var dbUrl = process.env.dbUrl || 'mongodb://127.0.0.1/FileServer';
 var Message = require('./app/models/message');
 
 var path = require('path');

@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const mongo = require('mongodb');
-const dbUrl = process.env.dbUrl;
+const dbUrl = process.env.dbUrl || 'mongodb://127.0.0.1/FileServer';
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const fs = require('fs');
