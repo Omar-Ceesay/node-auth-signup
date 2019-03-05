@@ -24,7 +24,7 @@
     "express-fileupload": "^0.4.0",
     "express-session": "^1.15.6",
     "find-remove": "^1.2.1",
-    "google-auth-library": "^0.12.0",
+    "google-auth-library": "^3.1.0",
     "googleapis": "^35.0.0",
     "gridfs-stream": "^1.1.1",
     "method-override": "^2.3.10",
