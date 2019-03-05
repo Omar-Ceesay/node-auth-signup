@@ -1,7 +1,7 @@
 var User = require('./models/user');
 var Message = require('./models/message');
 var mongo = require('mongodb');
-var dbUrl = process.env.dbUrl || 'mongodb://127.0.0.1/ReactApp';
+var dbUrl = process.env.dbUrl;
 var MongoClient = require('mongodb').MongoClient;
 
 MongoClient.connect(dbUrl)
