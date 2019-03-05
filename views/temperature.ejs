@@ -1,0 +1,82 @@
+<!doctype html>
+
+<html>
+
+	<head>
+
+		<title>Temperature Data</title>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> <!-- load bootstrap css -->
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+
+	</head>
+
+	<body class="bg-dark text-white">
+
+		<div class="container">
+			<canvas id="myChart" width="400" height="400"></canvas>
+		</div>
+
+	</body>
+	<script src="http://momentjs.com/downloads/moment.js" type="text/javascript"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js" type="text/javascript"></script>
+	<script src="https://underscorejs.org/underscore-min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="/temperature.js" type="text/javascript" charset="utf-8"></script>	
+	<script type="text/javascript">
+		var ctx = document.getElementById("myChart");
+		var data = "<%=temp_data%>";
+		var regex = /&#34;/g;
+		data = data.replace(regex, "\"");
+		data = JSON.parse(data);
+		var time = [];
+		var temps = [];
+		var temp_date = [];
+
+		var exact;
+
+		for (var i = data.length - 1; i >= 0; i--) {
+			if((data[i].exact - exact) < 3600002.88){
+
+			}else{
+				time.push(data[i].date+" "+data[i].time);
+				temps.push(data[i].temp);
+				exact = data[i].exact;
+			}
+		}
+
+		var myLineChart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		    	labels: time,
+		    	datasets: [{
+		    		data: temps,
+		    		label: "Temperature",
+		    		borderColor: "#3e95cd",
+		    		fill: true
+		    	}]
+		    },
+		    options: {
+		    	title: {
+			      display: true,
+			      text: 'Temperature in Room'
+			    },
+			    scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Date'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Temperature'
+						}
+					}]
+				}
+		    }
+		});
+	</script>
+</html>

@@ -21,9 +21,13 @@
     <a href="/auth/profile" class="btn btn-info"><span class="fa fa-user"></span> Profile</a>
     <a href="/auth/logout" class="btn btn-danger"><span class="fa fa-user"></span> Logout</a>
 		<a href="/room" class="btn btn-default"><span class="fa fa-user"></span> Join Room 1</a>
-		<a href="/room2" class="btn btn-default"><span class="fa fa-user"></span> Join Room 2</a>
+		<!-- <a href="/room2" class="btn btn-default"><span class="fa fa-user"></span> Join Room 2</a> -->
 	</div>
 
 </div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		var socket = io('/auth/profile');
+	</script>
 </body>
 </html>

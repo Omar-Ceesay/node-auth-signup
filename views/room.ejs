@@ -2,8 +2,8 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <link rel="stylesheet" type="text/css" href="../bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" type="text/css" href="../font-awesome.min.css"> <!-- load fontawesome -->
 
@@ -27,6 +27,10 @@
       .body{
         padding-bottom: 50px;
       }
+
+      #send{
+        font-size: 1em;
+      }
     </style>
 
     <link rel="stylesheet" href="./main.css">
@@ -45,10 +49,10 @@
         </ul>
     </div>
     <div class="messageBar">
-      <input id="m" autocomplete="off" name="body" id="sumbitMessage" type="text" /><button type="" onclick="sendMessage({username: '<%= user.username %>'})">Send</button>
+      <input id="m" autocomplete="off" name="body" id="sumbitMessage" type="text" /><button type="" id="send" onclick="sendMessage({username: '<%= user.username %>'})">Send</button>
     </div>
-    <script src="https://node-auth-signup.herokuapp.com/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io('/room');
       socket.on('chat message', function(msg){

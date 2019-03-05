@@ -8,10 +8,10 @@ MongoClient.connect(dbUrl)
  .then(function(client){
    let db = client.db('ReactApp')
 
-   let change_streams = db.collection('messages').watch()
-      change_streams.on('change', function(change){
-        console.log(JSON.stringify(change));
-      });
+   // let change_streams = db.collection('messages').watch()
+   //    change_streams.on('change', function(change){
+   //      console.log(JSON.stringify(change));
+   //    });
   });
 
 module.exports = function(router, passport){
