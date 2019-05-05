@@ -186,5 +186,5 @@ app.get('/temperature', function(req,res){
 
 require('./app/routes.js')(app, passport);
 
-http.listen(port, "localhost");
+http.listen(port);
 console.log('Server running on port: ' + port);
