@@ -19,7 +19,7 @@
     "csv-stream": "^0.2.0",
     "dateformat": "^3.0.3",
     "ejs": "^2.6.1",
-    "express": "~4.12.3",
+    "express": "~4.17.0",
     "express-busboy": "^7.0.0",
     "express-fileupload": "^0.4.0",
     "express-session": "^1.15.6",
