@@ -37,6 +37,6 @@
     "piexifjs": "^1.0.3",
     "socket.io": "^2.1.1",
     "superagent": "^3.8.3",
-    "twilio": "^2.11.1"
+    "twilio": "^3.39.1"
   }
 }
