@@ -1,0 +1,24 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "11:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: find-remove
+    versions:
+    - 2.0.3
+    - 3.0.0
+    - 3.0.1
+  - dependency-name: google-auth-library
+    versions:
+    - 6.1.6
+    - 7.0.0
+    - 7.0.1
+    - 7.0.2
+    - 7.0.3
+  - dependency-name: twilio
+    versions:
+    - 3.51.0
